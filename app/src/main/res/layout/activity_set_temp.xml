@@ -1,0 +1,248 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="#110000"
+    tools:context="app.akexorcist.bluetoothspp.SetTemp">
+
+    <TextView
+        android:text="เซนเซอร์ที่ 1"
+        android:textSize="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/s1"/>
+
+    <LinearLayout
+        android:id="@+id/node11"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/s1">
+
+        <TextView
+
+            android:text="อุณหภูมิสูงสุด : "
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"/>
+
+
+        <EditText
+            android:id="@+id/edit11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profile_image_view_layout"
+            android:layout_centerHorizontal="true"
+            android:ems="4"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/cel11"
+            android:text="องศาเซลเซียล"
+            android:layout_weight="4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/node12"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/node11">
+
+        <TextView
+
+            android:text="อุณหภูมิต่ำสุด : "
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"/>
+
+
+        <EditText
+            android:id="@+id/edit12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profile_image_view_layout"
+            android:layout_centerHorizontal="true"
+            android:ems="4"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/cel12"
+            android:text="องศาเซลเซียล"
+            android:layout_weight="4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_below="@+id/node12"
+        android:id="@+id/space"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:text="เซนเซอร์ที่ 2"
+        android:textSize="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/space"
+        android:id="@+id/s2"/>
+
+    <LinearLayout
+        android:id="@+id/node21"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/s2">
+
+        <TextView
+
+            android:text="อุณหภูมิสูงสุด : "
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"/>
+
+
+        <EditText
+            android:id="@+id/edit21"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profile_image_view_layout"
+            android:layout_centerHorizontal="true"
+            android:ems="4"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/cel21"
+            android:text="องศาเซลเซียล"
+            android:layout_weight="4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/node22"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/node21">
+
+        <TextView
+
+            android:text="อุณหภูมิต่ำสุด : "
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"/>
+
+
+        <EditText
+            android:id="@+id/edit22"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profile_image_view_layout"
+            android:layout_centerHorizontal="true"
+            android:ems="4"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/cel22"
+            android:text="องศาเซลเซียล"
+            android:layout_weight="4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_below="@+id/node22"
+        android:id="@+id/space2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:text="เซนเซอร์ที่ 3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/space2"
+        android:textSize="20dp"
+        android:id="@+id/s3"/>
+
+    <LinearLayout
+        android:id="@+id/node31"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/s3">
+
+        <TextView
+
+            android:text="อุณหภูมิสูงสุด : "
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"/>
+
+
+        <EditText
+            android:id="@+id/edit31"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:ems="4"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/cel31"
+            android:text="องศาเซลเซียล"
+            android:layout_weight="4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/node32"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/node31">
+
+        <TextView
+
+            android:text="อุณหภูมิต่ำสุด : "
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"/>
+
+
+        <EditText
+            android:id="@+id/edit32"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="4"
+            android:inputType="number" />
+
+        <TextView
+            android:id="@+id/cel32"
+            android:text="องศาเซลเซียล"
+            android:layout_weight="4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnSetTemp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ยืนยัน"
+        android:layout_weight="1"
+        android:onClick="onclickSubmit"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

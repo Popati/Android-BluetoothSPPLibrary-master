@@ -1,0 +1,324 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:paddingLeft="5dp"
+    android:paddingTop="10dp"
+    android:focusableInTouchMode="true" 
+    android:id="@+id/layout">
+
+    <requestFocus />
+
+    <TextView
+        android:id="@+id/textStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Status : Not connect"
+        android:textSize="12sp" />
+
+    
+    <TextView
+        android:id="@+id/temp"
+        android:text="ค่าอุณหภูมิปัจจุบัน"
+        android:layout_width="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingTop="15dp"
+        android:layout_weight="1"
+        android:textSize="20dp"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout 
+        android:id="@+id/temp1"
+        android:paddingTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/temp">
+
+        <TextView
+
+            android:text="เซนเซอร์ที่1 : "
+            android:layout_width="match_parent"
+            android:layout_weight="5"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/numcel"
+            android:layout_weight="6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/cel"
+            android:text="องศาเซลเซียล"
+            android:layout_weight="4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout 
+        android:id="@+id/temp2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/temp1">
+
+        <TextView
+
+            android:text="เซนเซอร์ที่1 : "
+            android:layout_width="match_parent"
+            android:layout_weight="5"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/numfer"
+            android:layout_weight="6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/fer"
+            android:text="องศาฟาเรนไฮต์"
+            android:layout_weight="4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_below="@+id/temp2"
+        android:id="@+id/space2"
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+    <LinearLayout
+        android:id="@+id/temp3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/space2">
+
+        <TextView
+
+            android:text="เซนเซอร์ที่2 : "
+            android:layout_width="match_parent"
+            android:layout_weight="5"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/numcel2"
+            android:layout_weight="6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/cel2"
+            android:text="องศาเซลเซียล"
+            android:layout_weight="4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/temp4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/temp3">
+
+        <TextView
+
+            android:text="เซนเซอร์ที่2 : "
+            android:layout_width="match_parent"
+            android:layout_weight="5"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/numfer2"
+            android:layout_weight="6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/fer2"
+            android:text="องศาฟาเรนไฮต์"
+            android:layout_weight="4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_below="@+id/temp4"
+        android:id="@+id/space3"
+        android:layout_width="match_parent"
+        android:layout_height="10dp" />
+
+    <LinearLayout
+        android:id="@+id/temp5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/space3">
+
+        <TextView
+
+            android:text="เซนเซอร์ที่3 : "
+            android:layout_width="match_parent"
+            android:layout_weight="5"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/numcel3"
+            android:layout_weight="6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/cel3"
+            android:text="องศาเซลเซียล"
+            android:layout_weight="4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/temp6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/temp5">
+
+        <TextView
+
+            android:text="เซนเซอร์ที่3 : "
+            android:layout_width="match_parent"
+            android:layout_weight="5"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/numfer3"
+            android:layout_weight="6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/fer3"
+            android:text="องศาฟาเรนไฮต์"
+            android:layout_weight="4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_below="@+id/temp6"
+        android:id="@+id/space"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:id="@+id/gyro"
+        android:text="ค่าความเร่งเชิงมุม"
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:textSize="20dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/space"/>
+
+    <LinearLayout 
+        android:id="@+id/x"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/gyro">
+
+        <TextView
+            android:id="@+id/numx"
+            android:text="0"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout 
+        android:id="@+id/y"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/x">
+
+
+        <TextView
+            android:id="@+id/numy"
+            android:text="0"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout 
+        android:id="@+id/z"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/y">
+
+
+        <TextView
+            android:id="@+id/numz"
+            android:text="0"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnClear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/z"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        android:visibility="invisible"
+        android:text="Delete All"/>
+
+    <Button
+        android:id="@+id/btnRealTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnClear"
+        android:layout_centerHorizontal="true"
+        android:onClick="onclickRealTime"
+        android:text="RealTime Graph" />
+
+    <Button
+        android:id="@+id/btnGraph"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnRealTime"
+        android:layout_centerHorizontal="true"
+        android:onClick="onclickGraph"
+        android:text="Stop" />
+
+    <Button
+        android:id="@+id/btnShowTemp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnClear"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:onClick="onclickShowTemp"
+        android:text="Notification" />
+
+
+</RelativeLayout>
