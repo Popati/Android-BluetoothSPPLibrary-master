@@ -49,5 +49,6 @@
     <string name="title_activity_select_history">SelectHistory</string>
     <string name="title_activity_google_chart">GoogleChart</string>
     <string name="title_activity_google_graph">GoogleGraph</string>
+    <string name="title_activity_temperature_low">TemperatureLow</string>
 
 </resources>

@@ -37,7 +37,27 @@ public class Home extends Activity {
 
         final dbTracking myDb = new dbTracking(this);
         myDb.getWritableDatabase(); // First method
-        //myDb.DeleteData();//delete all data
+
+        /*myDb.DeleteData();//delete all data
+        myDb.InsertHistory("2015-08-18 23:15", "2015-08-18 23:26");
+        myDb.InsertHistory("2015-08-18 23:26", "2015-08-18 23:29");
+        myDb.InsertHistory("2015-08-29 19:31", "2015-08-29 19:44");
+        myDb.InsertHistory("2015-08-30 00:58", "2015-08-30 01:00");
+        myDb.InsertHistory("2015-08-30 11:49", "2015-08-30 12:03");
+        myDb.InsertHistory("2015-08-30 22:19", "2015-08-30 22:31");
+        myDb.InsertHistory("2015-08-30 23:38", "2015-08-30 23:46");
+        myDb.InsertHistory("2015-08-31 00:00", "2015-08-31 00:00");
+        myDb.InsertHistory("2015-08-31 00:24", "2015-08-31 00:28");
+        myDb.InsertHistory("2015-08-31 00:58", "2015-08-31 00:00");
+        myDb.InsertHistory("2015-08-31 00:59", "2015-08-31 01:02");
+        myDb.InsertHistory("2015-08-31 01:16", "2015-08-31 01:20");
+        myDb.InsertHistory("2015-08-31 01:20", "2015-08-31 01:27");
+        myDb.InsertHistory("2015-08-31 01:37", "2015-08-31 01:47");
+        myDb.InsertHistory("2015-08-31 13:58", "2015-08-31 14:16");
+        myDb.InsertHistory("2015-09-03 10:50", "2015-09-03 10:57");
+        myDb.InsertHistory("2015-09-03 10:58", "2015-09-03 11:05");
+        myDb.InsertHistory("2015-09-05 13:09", "2015-09-05 13:14");
+        */
         //myDb.DropTable();
 
         List<dbTracking.sMembers> MebmerList = myDb.SelectAllDataTemp();
@@ -57,6 +77,8 @@ public class Home extends Activity {
             }
         }
 
+        //Intent intent = new Intent(this,TemperatureHigh.class);
+       // startActivity(intent);
         /*bt.setOnDataReceivedListener(new OnDataReceivedListener() {
             public void onDataReceived(byte[] data, String message) {
                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();

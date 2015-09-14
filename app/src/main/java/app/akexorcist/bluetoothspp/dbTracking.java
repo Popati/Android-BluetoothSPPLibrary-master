@@ -32,14 +32,14 @@ public class dbTracking extends SQLiteOpenHelper  {
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// Create Table Name
-	    db.execSQL("CREATE TABLE Temp (Time DATETIME DEFAULT CURRENT_TIMESTAMP, Tem REAL, Node TEXT ,PRIMARY KEY (Time,Node));");
+	    db.execSQL("CREATE TABLE RealTime (Time DATETIME DEFAULT CURRENT_TIMESTAMP, Tem REAL, Node TEXT ,PRIMARY KEY (Time,Node));");
 	    db.execSQL("CREATE TABLE Gyro (Time DATETIME PRIMARY KEY DEFAULT CURRENT_TIMESTAMP, x REAL, y REAL, z REAL);");
 	    db.execSQL("CREATE TABLE Location (Time DATETIME PRIMARY KEY DEFAULT CURRENT_TIMESTAMP, lati REAL, long REAL);");
 	    db.execSQL("CREATE TABLE HistoryTime (TimeStart DATETIME PRIMARY KEY DEFAULT CURRENT_TIMESTAMP, TimeStop DATETIME DEFAULT CURRENT_TIMESTAMP);");
 		   
 	    Log.e("CREATE TABLE","Create Table Successfully.");
 	}
-	// Insert Data Temp
+	// Insert Data RealTime
 	public long InsertDataTemp(String dt, double tem,String node) {
 		 try {
 			SQLiteDatabase db;
@@ -50,7 +50,7 @@ public class dbTracking extends SQLiteOpenHelper  {
      		initialValues.put("Tem", tem);
 			initialValues.put("Node", node);
      		
-     		long rowId = db.insert("Temp", null, initialValues);
+     		long rowId = db.insert("RealTime", null, initialValues);
      		
 			db.close();
 			return rowId; // return rows inserted.
@@ -244,7 +244,7 @@ public class dbTracking extends SQLiteOpenHelper  {
 			 SQLiteDatabase db;
 			 db = this.getReadableDatabase(); // Read Data
 				
-			 String strSQL = "SELECT * FROM Temp";
+			 String strSQL = "SELECT * FROM RealTime";
 			 Cursor cursor = db.rawQuery(strSQL, null);
 			 
 			 	if(cursor != null)
@@ -270,6 +270,8 @@ public class dbTracking extends SQLiteOpenHelper  {
 	public List<sHistory> SelectAllDataHistory() {
 		
 		 try {
+
+
 			 List<sHistory> MemberList = new ArrayList<sHistory>();
 			 
 			 SQLiteDatabase db;
@@ -306,7 +308,7 @@ public class dbTracking extends SQLiteOpenHelper  {
 			 SQLiteDatabase db;
 			 db = this.getReadableDatabase(); // Read Data
 				
-			 String strSQL = "SELECT * FROM Temp WHERE Time >= '"+timestart+"' AND Time < '"+timestop+"' AND Node ='"+node+"' ";
+			 String strSQL = "SELECT * FROM RealTime WHERE Time >= '"+timestart+"' AND Time < '"+timestop+"' AND Node ='"+node+"' ";
 					 
 			 Cursor cursor = db.rawQuery(strSQL, null);
 			 
@@ -339,7 +341,7 @@ public class dbTracking extends SQLiteOpenHelper  {
 			SQLiteDatabase db;
 			db = this.getReadableDatabase(); // Read Data
 
-			String strSQL = "SELECT * FROM Temp WHERE Time >= '"+timestart+"' AND Node ='"+node+"' ";
+			String strSQL = "SELECT * FROM RealTime WHERE Time >= '"+timestart+"' AND Node ='"+node+"' ";
 
 			Cursor cursor = db.rawQuery(strSQL, null);
 
@@ -408,7 +410,7 @@ public class dbTracking extends SQLiteOpenHelper  {
 			SQLiteDatabase db;
 			db = this.getReadableDatabase(); // Read Data
 
-			String strSQL = "SELECT * FROM Temp WHERE Time = '"+time+"' AND Node ='"+node+"' ";
+			String strSQL = "SELECT * FROM RealTime WHERE Time = '"+time+"' AND Node ='"+node+"' ";
 
 			Cursor cursor = db.rawQuery(strSQL, null);
 
@@ -435,7 +437,7 @@ public class dbTracking extends SQLiteOpenHelper  {
 			SQLiteDatabase db;
      		db = this.getWritableDatabase(); // Write Data
      		
-     		db.execSQL("delete from Temp");
+     		db.execSQL("delete from RealTime");
      		db.execSQL("delete from Gyro");
      		db.execSQL("delete from HistoryTime");
 			db.close();
@@ -454,7 +456,7 @@ public class dbTracking extends SQLiteOpenHelper  {
 			SQLiteDatabase db;
      		db = this.getWritableDatabase(); // Write Data
      		
-     		db.execSQL("DROP TABLE IF EXISTS Temp");
+     		db.execSQL("DROP TABLE IF EXISTS RealTime");
             db.execSQL("DROP TABLE IF EXISTS Gyro");
             db.execSQL("DROP TABLE IF EXISTS Location");
             db.execSQL("DROP TABLE IF EXISTS HistoryTime");
@@ -471,7 +473,7 @@ public class dbTracking extends SQLiteOpenHelper  {
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
-        db.execSQL("DROP TABLE IF EXISTS Temp");
+        db.execSQL("DROP TABLE IF EXISTS RealTime");
         db.execSQL("DROP TABLE IF EXISTS Gyro");
         db.execSQL("DROP TABLE IF EXISTS Location");
         db.execSQL("DROP TABLE IF EXISTS HistoryTime");

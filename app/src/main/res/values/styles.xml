@@ -17,5 +17,58 @@
         <item name="android:shadowDy" >1</item>
         <item name="android:shadowRadius" >5</item>
     </style>
+    <style name="font_list" >
+        <item name="android:layout_width" >fill_parent</item>
+        <item name="android:layout_height" >wrap_content</item>
+        <item name="android:textColor" >#ffffff</item>
+        <item name="android:gravity" >center</item>
+        <item name="android:layout_margin" >3dp</item>
+        <item name="android:textSize" >18dp</item>
+        <item name="android:textStyle" >bold</item>
+        <item name="android:shadowColor" >#000000</item>
+        <item name="android:shadowDx" >1</item>
+        <item name="android:shadowDy" >1</item>
+        <item name="android:shadowRadius" >5</item>
+    </style>
+    <style name="topic_list" >
+        <item name="android:layout_width" >fill_parent</item>
+        <item name="android:layout_height" >wrap_content</item>
+        <item name="android:textColor" >#303030</item>
+        <item name="android:gravity" >center</item>
+        <item name="android:layout_margin" >3dp</item>
+        <item name="android:textSize" >20dp</item>
+        <item name="android:textStyle" >bold</item>
+        <item name="android:shadowColor" >#ffffff</item>
+        <item name="android:shadowDx" >2</item>
+        <item name="android:shadowDy" >2</item>
+        <item name="android:shadowRadius" >10</item>
+    </style>
 
+    <style name="CodeFont">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:typeface">monospace</item>
+    </style>
+
+    <style name="FontBY">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#010100</item>
+        <item name="android:shadowColor" >#fdff6e</item>
+        <item name="android:shadowDx" >1</item>
+        <item name="android:shadowDy" >1</item>
+        <item name="android:shadowRadius" >5</item>
+        <item name="android:typeface">monospace</item>
+    </style>
+    <style name="FontBR">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">#ff1333</item>
+        <item name="android:shadowColor" >#ffffff</item>
+        <item name="android:shadowDx" >1</item>
+        <item name="android:shadowDy" >1</item>
+        <item name="android:shadowRadius" >5</item>
+        <item name="android:typeface">monospace</item>
+    </style>
 </resources>

@@ -32,7 +32,7 @@ public class OneFragment extends Fragment{
 
         WebView webview;
 
-        String html="<iframe width=\"430\" height=\"280\" frameborder=\"0\" src=\"http://app.ubidots.com/ubi/getchart/BGaMJQMCWgALfdXqK1Doldv-0BQ\"></iframe>";
+        String html="<iframe width=\"400\" height=\"280\" frameborder=\"0\" src=\"http://app.ubidots.com/ubi/getchart/BGaMJQMCWgALfdXqK1Doldv-0BQ\"></iframe>";
         webview = (WebView) rootView.findViewById(R.id.webView);
         webview.getSettings().setJavaScriptEnabled(true);
         webview.loadData(html, "text/html", null);

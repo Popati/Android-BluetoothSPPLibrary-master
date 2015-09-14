@@ -5,7 +5,8 @@
     android:focusable="true"
     android:paddingLeft="5dp"
     android:paddingTop="10dp"
-    android:focusableInTouchMode="true" 
+    android:focusableInTouchMode="true"
+    android:background="#88dddd"
     android:id="@+id/layout">
 
     <requestFocus />
@@ -28,6 +29,7 @@
         android:paddingTop="15dp"
         android:layout_weight="1"
         android:textSize="20dp"
+        style="@style/CodeFont"
         android:layout_height="wrap_content" />
 
     <LinearLayout 
@@ -43,18 +45,21 @@
             android:text="เซนเซอร์ที่1 : "
             android:layout_width="match_parent"
             android:layout_weight="5"
+            style="@style/CodeFont"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/numcel"
             android:layout_weight="6"
             android:layout_width="match_parent"
+            style="@style/CodeFont"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/cel"
             android:text="องศาเซลเซียล"
             android:layout_weight="4"
+            style="@style/CodeFont"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -72,11 +77,13 @@
             android:text="เซนเซอร์ที่1 : "
             android:layout_width="match_parent"
             android:layout_weight="5"
+            style="@style/CodeFont"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/numfer"
             android:layout_weight="6"
+            style="@style/CodeFont"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -84,6 +91,7 @@
             android:id="@+id/fer"
             android:text="องศาฟาเรนไฮต์"
             android:layout_weight="4"
+            style="@style/CodeFont"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -107,11 +115,13 @@
             android:text="เซนเซอร์ที่2 : "
             android:layout_width="match_parent"
             android:layout_weight="5"
+            style="@style/CodeFont"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/numcel2"
             android:layout_weight="6"
+            style="@style/CodeFont"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -119,6 +129,7 @@
             android:id="@+id/cel2"
             android:text="องศาเซลเซียล"
             android:layout_weight="4"
+            style="@style/CodeFont"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -129,6 +140,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        style="@style/CodeFont"
         android:layout_below="@+id/temp3">
 
         <TextView
@@ -136,11 +148,13 @@
             android:text="เซนเซอร์ที่2 : "
             android:layout_width="match_parent"
             android:layout_weight="5"
+            style="@style/CodeFont"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/numfer2"
             android:layout_weight="6"
+            style="@style/CodeFont"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -148,6 +162,7 @@
             android:id="@+id/fer2"
             android:text="องศาฟาเรนไฮต์"
             android:layout_weight="4"
+            style="@style/CodeFont"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -171,11 +186,13 @@
             android:text="เซนเซอร์ที่3 : "
             android:layout_width="match_parent"
             android:layout_weight="5"
+            style="@style/CodeFont"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/numcel3"
             android:layout_weight="6"
+            style="@style/CodeFont"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -183,6 +200,7 @@
             android:id="@+id/cel3"
             android:text="องศาเซลเซียล"
             android:layout_weight="4"
+            style="@style/CodeFont"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -200,11 +218,13 @@
             android:text="เซนเซอร์ที่3 : "
             android:layout_width="match_parent"
             android:layout_weight="5"
+            style="@style/CodeFont"
             android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/numfer3"
             android:layout_weight="6"
+            style="@style/CodeFont"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -212,6 +232,7 @@
             android:id="@+id/fer3"
             android:text="องศาฟาเรนไฮต์"
             android:layout_weight="4"
+            style="@style/CodeFont"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -229,6 +250,8 @@
         android:layout_width="match_parent"
         android:layout_weight="1"
         android:textSize="20dp"
+        android:paddingLeft="10dp"
+        style="@style/CodeFont"
         android:layout_height="wrap_content"
         android:layout_below="@+id/space"/>
 
@@ -242,6 +265,7 @@
         <TextView
             android:id="@+id/numx"
             android:text="0"
+            style="@style/CodeFont"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -259,6 +283,7 @@
         <TextView
             android:id="@+id/numy"
             android:text="0"
+            style="@style/CodeFont"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -276,6 +301,7 @@
         <TextView
             android:id="@+id/numz"
             android:text="0"
+            style="@style/CodeFont"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -299,6 +325,8 @@
         android:layout_below="@+id/btnClear"
         android:layout_centerHorizontal="true"
         android:onClick="onclickRealTime"
+        style="@style/button_text"
+        android:background="@drawable/red_button"
         android:text="RealTime Graph" />
 
     <Button
@@ -308,6 +336,8 @@
         android:layout_below="@+id/btnRealTime"
         android:layout_centerHorizontal="true"
         android:onClick="onclickGraph"
+        style="@style/button_text"
+        android:background="@drawable/red_button"
         android:text="Stop" />
 
     <Button
@@ -318,7 +348,19 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:onClick="onclickShowTemp"
+        style="@style/button_text"
+        android:background="@drawable/red_button"
         android:text="Notification" />
 
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        android:layout_centerHorizontal="true"/>
 
 </RelativeLayout>
+
+
+

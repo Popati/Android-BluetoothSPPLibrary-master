@@ -43,10 +43,14 @@ public class History extends Activity {
 				String message="You clicked #"+position
 						+", whick is string: "+textView.getText().toString();
 				
-				String first=textView.getText().toString().substring(0, 10);
-				String last=textView.getText().toString().substring(19, 29);
+				/*String first=textView.getText().toString().substring(0, 10);
+				String last=textView.getText().toString().substring(21, 32);
 				String sfirst=textView.getText().toString().substring(11, 16);
-				String slast=textView.getText().toString().substring(30, 35);
+				String slast=textView.getText().toString().substring(33, 38);*/
+				String first=textView.getText().toString().substring(0, 10);
+				String last=textView.getText().toString().substring(19, 30);
+				String sfirst=textView.getText().toString().substring(11, 16);
+				String slast=textView.getText().toString().substring(29, 35);
 				//Toast.makeText(History.this, slast, Toast.LENGTH_LONG).show();
 				Log.v("onclickGraph", first + " " + last + " " + sfirst + " " + slast);
 				onclickGraph(first, last, sfirst, slast);

@@ -31,6 +31,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".Terminal"
@@ -57,14 +58,15 @@
             android:label="@string/title_activity_maps" >
         </activity>
         <activity
-            android:name=".ReceiverActivity"
+            android:name=".TemperatureHigh"
             android:label="@string/title_activity_receiver"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" >
         </activity>
         <activity
-            android:name=".Temp"
+            android:name=".RealTime"
             android:label="@string/title_activity_temp" >
+
         </activity>
         <activity
             android:name=".SetTemp"
@@ -77,6 +79,10 @@
         <activity
             android:name=".GoogleGraph"
             android:label="@string/title_activity_google_graph" >
+        </activity>
+        <activity
+            android:name=".TemperatureLow"
+            android:label="@string/title_activity_temperature_low" >
         </activity>
     </application>
 

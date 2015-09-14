@@ -22,6 +22,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -66,7 +68,10 @@ public class Terminal extends Activity {
 	SensorManager sensorManager;
 	Sensor sensor;
 	RelativeLayout l;
-	
+    LinearLayout temp1,temp2,temp3,temp4,temp5,temp6,x,y,z;
+    Button b;
+    ProgressBar p;
+
     private Thread thread;
     private Handler handler = new Handler();
     Double timeStart,timeStop;
@@ -232,6 +237,8 @@ public class Terminal extends Activity {
             Intent intent = new Intent(getApplicationContext(), DeviceList.class);
             startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
         } else if(id == R.id.menu_device_connect) {
+            p=(ProgressBar) findViewById(R.id.progressBar);
+            p.setVisibility(View.VISIBLE);
             bt.setDeviceTarget(BluetoothState.DEVICE_OTHER);
 			
 			if(bt.getServiceState() == BluetoothState.STATE_CONNECTED)
@@ -278,7 +285,7 @@ public class Terminal extends Activity {
 		//sensorManager.unregisterListener(gyroListener);
 
 	}
-/*
+    /*
 	public SensorEventListener gyroListener = new SensorEventListener() {
 		public void onAccuracyChanged(Sensor sensor, int acc) { }
  
@@ -332,7 +339,6 @@ public class Terminal extends Activity {
                                     count = 0;
                                 }
                                 if(count<=6) {
-
                                     if (hallostring.length() == 27) {
                                         String node = hallostring.substring(0, 5);
                                         cel = hallostring.substring(8, 13);
@@ -364,13 +370,13 @@ public class Terminal extends Activity {
                                                 numcel.setTextColor(Color.parseColor("#FF0000"));
                                                 numfer.setTextColor(Color.parseColor("#FF0000"));
                                                 Toast.makeText(getApplicationContext(), "ขณะนี้เซนเซอร์ที่1อุณหภูมิมากกว่า "+maxnode1+" C", Toast.LENGTH_SHORT).show();
-                                                createNotification("ขณะนี้เซนเซอร์ที่1อุณหภูมิมากกว่า " + maxnode1+" C");
+                                                createNotificationH("ขณะนี้เซนเซอร์ที่1อุณหภูมิมากกว่า " + maxnode1 + " C");
                                             }
                                             if(fc<=minnode1){
                                                 numcel.setTextColor(Color.parseColor("#FFFF66"));
                                                 numfer.setTextColor(Color.parseColor("#FFFF66"));
                                                 Toast.makeText(getApplicationContext(), "ขณะนี้เซนเซอร์ที่1อุณหภูมิต่ำกว่า "+minnode1+" C", Toast.LENGTH_SHORT).show();
-                                                createNotification("ขณะนี้เซนเซอร์ที่1อุณหภูมิต่ำกว่า " + minnode1+" C");
+                                                createNotificationL("ขณะนี้เซนเซอร์ที่1อุณหภูมิต่ำกว่า " + minnode1 + " C");
                                             }
                                         }
 
@@ -390,13 +396,13 @@ public class Terminal extends Activity {
                                                 numcel2.setTextColor(Color.parseColor("#FF0000"));
                                                 numfer2.setTextColor(Color.parseColor("#FF0000"));
                                                 Toast.makeText(getApplicationContext(), "ขณะนี้เซนเซอร์ที่2อุณหภูมิมากกว่า "+maxnode2+" C", Toast.LENGTH_SHORT).show();
-                                                createNotification("ขณะนี้เซนเซอร์ที่2อุณหภูมิมากกว่า " + maxnode2+" C");
+                                                createNotificationH("ขณะนี้เซนเซอร์ที่2อุณหภูมิมากกว่า " + maxnode2 + " C");
                                             }
                                             if(fc<=minnode2){
                                                 numcel2.setTextColor(Color.parseColor("#FFFF66"));
                                                 numfer2.setTextColor(Color.parseColor("#FFFF66"));
                                                 Toast.makeText(getApplicationContext(), "ขณะนี้เซนเซอร์ที่2อุณหภูมิต่ำกว่า "+minnode2+" C", Toast.LENGTH_SHORT).show();
-                                                createNotification("ขณะนี้เซนเซอร์ที่2อุณหภูมิต่ำกว่า " + minnode2+" C");
+                                                createNotificationL("ขณะนี้เซนเซอร์ที่2อุณหภูมิต่ำกว่า " + minnode2 + " C");
                                             }
                                         }
                                         if (node.equals("nodeg")) {
@@ -415,28 +421,24 @@ public class Terminal extends Activity {
                                                 numcel3.setTextColor(Color.parseColor("#FF0000"));
                                                 numfer3.setTextColor(Color.parseColor("#FF0000"));
                                                 Toast.makeText(getApplicationContext(), "ขณะนี้เซนเซอร์ที่3อุณหภูมิมากกว่า "+maxnode3+" C", Toast.LENGTH_SHORT).show();
-                                                createNotification("ขณะนี้เซนเซอร์ที่3อุณหภูมิมากกว่า " + maxnode3+" C");
+                                                createNotificationH("ขณะนี้เซนเซอร์ที่3อุณหภูมิมากกว่า " + maxnode3 + " C");
                                             }
                                             if(fc<=minnode3){
                                                 numcel3.setTextColor(Color.parseColor("#FFFF66"));
                                                 numfer3.setTextColor(Color.parseColor("#FFFF66"));
                                                 Toast.makeText(getApplicationContext(), "ขณะนี้เซนเซอร์ที่3อุณหภูมิต่ำกว่า "+minnode3+" C", Toast.LENGTH_SHORT).show();
-                                                createNotification("ขณะนี้เซนเซอร์ที่3อุณหภูมิต่ำกว่า " + minnode3+" C");
+                                                createNotificationL("ขณะนี้เซนเซอร์ที่3อุณหภูมิต่ำกว่า " + minnode3 + " C");
                                             }
                                         }
                                         //Toast.makeText(Terminal.this, hallostring, Toast.LENGTH_SHORT).show();
                                     }
                                 }
                                 if (hallostring.length() < 27) {
-                                    String node = hallostring.substring(0, 1);
-                                    if (node.equals("X"))
-                                        numx.setText("X :  " + hallostring.substring(2, hallostring.length()) + "  rad/s");
-
-                                    if (node.equals("Y"))
-                                        numy.setText("Y :  " + hallostring.substring(2, hallostring.length()) + "  rad/s");
-
-                                    if (node.equals("Z"))
-                                        numz.setText("Z :  " + hallostring.substring(2, hallostring.length()) + "  rad/s");
+                                    String node[] = hallostring.split("\\,");
+                                    numx.setText("X :  " + node[0].toString() + "  rad/s");
+                                    numy.setText("Y :  " + node[1].toString() + "  rad/s");
+                                    numz.setText("Z :  " + node[2].toString() + "  rad/s");
+                                    insertGyroTOserver(node[0].toString(), node[1].toString(), node[2].toString(), dateFormat.format(date));
                                 }
                             }
 
@@ -450,6 +452,13 @@ public class Terminal extends Activity {
         };
         thread.start();
 
+    }
+    private Double CalResultVator(int x,int y,int z){
+        double result=0;
+        double resultVactor=0;
+        result=((x*x)+(y*y)+(z*z));
+        resultVactor=Math.sqrt(result);
+        return resultVactor;
     }
     public String getHttpGet(String url) {
         StringBuilder str = new StringBuilder();
@@ -493,10 +502,28 @@ public class Terminal extends Activity {
             httpclient.execute(httppost);
         }
         catch (Exception e){
-            Log.d("log_err","Error in http connection"+e.toString());
+            Log.d("log_err", "Error in http connection" + e.toString());
         }
     }
-    public void createNotification(String m) {
+    public void insertGyroTOserver(String x, String y,String z, String dt){
+        try {
+            ArrayList<NameValuePair> nameValuePairs=new ArrayList<NameValuePair>();
+            nameValuePairs.add(new BasicNameValuePair("isAdd","true"));
+            nameValuePairs.add(new BasicNameValuePair("x",x));
+            nameValuePairs.add(new BasicNameValuePair("y",y));
+            nameValuePairs.add(new BasicNameValuePair("z",z));
+            nameValuePairs.add(new BasicNameValuePair("time",dt));
+
+            HttpClient httpclient =new DefaultHttpClient();
+            HttpPost httppost=new HttpPost("http://tqfsmart.info/addGyro.php");
+            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs,"UTF-8"));
+            httpclient.execute(httppost);
+        }
+        catch (Exception e){
+            Log.d("log_err", "Error in http connection" + e.toString());
+        }
+    }
+    public void createNotificationH(String m) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
         Notification notification = new Notification(android.R.drawable.stat_notify_error,
@@ -507,16 +534,30 @@ public class Terminal extends Activity {
         String Title = "Warning";
         String Message = m;
 
-        Intent intent = new Intent(this, ReceiverActivity.class);
+        Intent intent = new Intent(this, TemperatureHigh.class);
         PendingIntent activity = PendingIntent.getActivity(this, 0, intent, 0);
         notification.setLatestEventInfo(this, Title, Message, activity);
-
         notification.number += 1;
-
         notification.defaults = Notification.DEFAULT_ALL; // Sound Vibrate Light
-
         notificationManager.notify(1, notification);
+    }
+    public void createNotificationL(String m) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
+        Notification notification = new Notification(android.R.drawable.stat_notify_error,
+                "New notification", System.currentTimeMillis());
+
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+
+        String Title = "Warning";
+        String Message = m;
+
+        Intent intent = new Intent(this, TemperatureLow.class);
+        PendingIntent activity = PendingIntent.getActivity(this, 0, intent, 0);
+        notification.setLatestEventInfo(this, Title, Message, activity);
+        notification.number += 1;
+        notification.defaults = Notification.DEFAULT_ALL; // Sound Vibrate Light
+        notificationManager.notify(1, notification);
     }
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == BluetoothState.REQUEST_CONNECT_DEVICE) {
@@ -574,18 +615,88 @@ public class Terminal extends Activity {
         startActivity(intent);
     }
     public void onclickRealTime(View view){
-        Intent intent=new Intent(this,Temp.class);
+        Intent intent=new Intent(this,RealTime.class);
         startActivity(intent);
     }
     private void HideAct() {
-        l=(RelativeLayout) findViewById(R.id.layout);
-        l.setVisibility(View.INVISIBLE);
+        textStatus=(TextView) findViewById(R.id.textStatus);
+        textStatus.setVisibility(View.INVISIBLE);
+        temp=(TextView) findViewById(R.id.temp);
+        temp.setVisibility(View.INVISIBLE);
+        temp=(TextView) findViewById(R.id.gyro);
+        temp.setVisibility(View.INVISIBLE);
+
+        temp1=(LinearLayout) findViewById(R.id.temp1);
+        temp1.setVisibility(View.INVISIBLE);
+        temp2=(LinearLayout) findViewById(R.id.temp2);
+        temp2.setVisibility(View.INVISIBLE);
+        temp3=(LinearLayout) findViewById(R.id.temp3);
+        temp3.setVisibility(View.INVISIBLE);
+        temp4=(LinearLayout) findViewById(R.id.temp4);
+        temp4.setVisibility(View.INVISIBLE);
+        temp5=(LinearLayout) findViewById(R.id.temp5);
+        temp5.setVisibility(View.INVISIBLE);
+        temp6=(LinearLayout) findViewById(R.id.temp6);
+        temp6.setVisibility(View.INVISIBLE);
+
+        x=(LinearLayout) findViewById(R.id.x);
+        x.setVisibility(View.INVISIBLE);
+        y=(LinearLayout) findViewById(R.id.y);
+        y.setVisibility(View.INVISIBLE);
+        z=(LinearLayout) findViewById(R.id.z);
+        z.setVisibility(View.INVISIBLE);
+
+        b=(Button) findViewById(R.id.btnShowTemp);
+        b.setVisibility(View.INVISIBLE);
+        b=(Button) findViewById(R.id.btnRealTime);
+        b.setVisibility(View.INVISIBLE);
+        b=(Button) findViewById(R.id.btnGraph);
+        b.setVisibility(View.INVISIBLE);
+        p=(ProgressBar) findViewById(R.id.progressBar);
+        p.setVisibility(View.INVISIBLE);
+        //l=(RelativeLayout) findViewById(R.id.layout);
+        //l.setVisibility(View.INVISIBLE);
 
     }
     private void ShowAct() {
-        l=(RelativeLayout) findViewById(R.id.layout);
-        l.setVisibility(View.VISIBLE);
+        //l=(RelativeLayout) findViewById(R.id.layout);
+        //l.setVisibility(View.VISIBLE);
 
+        textStatus=(TextView) findViewById(R.id.textStatus);
+        textStatus.setVisibility(View.VISIBLE);
+        temp=(TextView) findViewById(R.id.temp);
+        temp.setVisibility(View.VISIBLE);
+        temp=(TextView) findViewById(R.id.gyro);
+        temp.setVisibility(View.VISIBLE);
+
+        temp1=(LinearLayout) findViewById(R.id.temp1);
+        temp1.setVisibility(View.VISIBLE);
+        temp2=(LinearLayout) findViewById(R.id.temp2);
+        temp2.setVisibility(View.VISIBLE);
+        temp3=(LinearLayout) findViewById(R.id.temp3);
+        temp3.setVisibility(View.VISIBLE);
+        temp4=(LinearLayout) findViewById(R.id.temp4);
+        temp4.setVisibility(View.VISIBLE);
+        temp5=(LinearLayout) findViewById(R.id.temp5);
+        temp5.setVisibility(View.VISIBLE);
+        temp6=(LinearLayout) findViewById(R.id.temp6);
+        temp6.setVisibility(View.VISIBLE);
+
+        x=(LinearLayout) findViewById(R.id.x);
+        x.setVisibility(View.VISIBLE);
+        y=(LinearLayout) findViewById(R.id.y);
+        y.setVisibility(View.VISIBLE);
+        z=(LinearLayout) findViewById(R.id.z);
+        z.setVisibility(View.VISIBLE);
+
+        b=(Button) findViewById(R.id.btnShowTemp);
+        b.setVisibility(View.VISIBLE);
+        b=(Button) findViewById(R.id.btnRealTime);
+        b.setVisibility(View.VISIBLE);
+        b=(Button) findViewById(R.id.btnGraph);
+        b.setVisibility(View.VISIBLE);
+        p=(ProgressBar) findViewById(R.id.progressBar);
+        p.setVisibility(View.INVISIBLE);
     }
 
 }
