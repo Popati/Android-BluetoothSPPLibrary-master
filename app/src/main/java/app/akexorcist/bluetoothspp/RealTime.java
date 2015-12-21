@@ -1,21 +1,18 @@
 package app.akexorcist.bluetoothspp;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +24,7 @@ import app.akexorcist.bluetotohspp.library.BluetoothSPP;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 
 
-public class RealTime extends FragmentActivity implements ActionBar.TabListener {
+public class RealTime extends AppCompatActivity implements ActionBar.TabListener {
 
     BluetoothSPP bt;
     TextView textStatus, numcel, numfer,temp;
@@ -39,7 +36,7 @@ public class RealTime extends FragmentActivity implements ActionBar.TabListener 
     private TabsPagerAdapter mAdapter;
     private ActionBar actionBar;
     // Tab titles
-    private String[] tabs = { "Node1", "Node2", "NodeGyro" };
+    private String[] tabs = { "Node1", "Node2" };
 
     private Thread thread;
     private Handler handler = new Handler();
@@ -51,15 +48,15 @@ public class RealTime extends FragmentActivity implements ActionBar.TabListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_tab);
 
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //Lock Screen
-
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT); //Lock Screen
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         // Initilization
         viewPager = (ViewPager) findViewById(R.id.pager);
-        actionBar = getActionBar();
+        actionBar = getSupportActionBar();
         mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
         viewPager.setAdapter(mAdapter);
-        actionBar.setHomeButtonEnabled(false);
+        actionBar.setHomeButtonEnabled(true);
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         // Adding Tabs
@@ -108,7 +105,6 @@ public class RealTime extends FragmentActivity implements ActionBar.TabListener 
         // TODO Auto-generated method stub
         ListView list=(ListView) findViewById(R.id.listView1);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
@@ -116,7 +112,6 @@ public class RealTime extends FragmentActivity implements ActionBar.TabListener 
                 TextView textView=(TextView)view;
                 String message="You clicked #"+position
                         +", whick is string: "+textView.getText().toString();
-
                 Log.v("listnode", message);
                 if(textView.getText().toString()=="NODE 1")
                 {
@@ -143,23 +138,8 @@ public class RealTime extends FragmentActivity implements ActionBar.TabListener 
                     transaction.commit();
                 }
             }
-
         });
-
     }*/
-    private void populateListView() {
-        String[] myItems = new String[3];
-        myItems[0]="NODE 1";
-        myItems[1]="NODE 2";
-        myItems[2]="NODE GYRO";
-        ArrayAdapter<String> adapter=new ArrayAdapter<String>(
-                this,
-                R.layout.da_item,
-                myItems);
-
-        ListView list=(ListView)findViewById(R.id.listView1);
-        list.setAdapter(adapter);
-    }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         this.menu = menu;
@@ -221,7 +201,7 @@ public class RealTime extends FragmentActivity implements ActionBar.TabListener 
         timeStop= Double.parseDouble(dateFormat.format(date));
         timeStop2= dateFormat2.format(date);
         Log.v("TimeStart",timeStop.toString());
-        Intent intent = new Intent(this,Graph.class);
+        Intent intent = new Intent(this,GoogleGraph.class);
         intent.putExtra("Page","Terminal");
         intent.putExtra("TimeStart", timeStart);
         intent.putExtra("TimeStart2", timeStart2);
@@ -233,17 +213,17 @@ public class RealTime extends FragmentActivity implements ActionBar.TabListener 
     }
 
     @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+    public void onTabSelected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
         viewPager.setCurrentItem(tab.getPosition());
     }
 
     @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction ft) {
+    public void onTabUnselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
 
     }
 
     @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction ft) {
+    public void onTabReselected(ActionBar.Tab tab, android.support.v4.app.FragmentTransaction ft) {
 
     }
 }

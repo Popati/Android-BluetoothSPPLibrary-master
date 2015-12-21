@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="app.akexorcist.bluetoothspp" >
+    package="app.akexorcist.bluetoothspp">
 
-    <uses-sdk android:minSdkVersion="14" />
+    <uses-sdk android:minSdkVersion="11" />
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -14,37 +14,31 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="18" />
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/bloodsac2"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:icon="@drawable/blood_icon"
+        android:label="Blood Tracking"
+        android:theme="@style/AppTheme">
         <activity
             android:name=".Home"
-            android:label="@string/title_activity_home" >
+            android:label="Blood Tracking">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
             android:name=".Terminal"
-            android:label="@string/title_activity_terminal" >
-        </activity>
-        <activity
-            android:name=".Graph"
-            android:label="@string/title_activity_graph" >
-        </activity>
+            android:label="@string/title_activity_terminal" />
         <activity
             android:name=".History"
-            android:label="@string/title_activity_history" >
-        </activity>
+            android:label="@string/title_activity_history" />
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -55,35 +49,35 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" >
-        </activity>
+            android:label="@string/title_activity_maps" />
         <activity
             android:name=".TemperatureHigh"
             android:label="@string/title_activity_receiver"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" >
-        </activity>
+            android:theme="@style/AppTheme" />
         <activity
             android:name=".RealTime"
-            android:label="@string/title_activity_temp" >
-
-        </activity>
+            android:label="@string/title_activity_temp" />
         <activity
             android:name=".SetTemp"
-            android:label="@string/title_activity_set_temp" >
-        </activity>
+            android:label="@string/title_activity_set_temp" />
         <activity
             android:name=".GoogleChart"
-            android:label="@string/title_activity_google_chart" >
-        </activity>
-        <activity
-            android:name=".GoogleGraph"
-            android:label="@string/title_activity_google_graph" >
-        </activity>
+            android:label="@string/title_activity_google_chart" />
         <activity
             android:name=".TemperatureLow"
-            android:label="@string/title_activity_temperature_low" >
-        </activity>
+            android:label="@string/title_activity_temperature_low" />
+        <activity
+            android:name=".GoogleLocation"
+            android:label="@string/title_activity_google_location" />
+        <activity
+            android:name=".MainHistory"
+            android:label="@string/title_activity_main_history" />
+
+        <service
+            android:name=".RSSPullService"
+            android:exported="false"></service>
+
     </application>
 
 </manifest>

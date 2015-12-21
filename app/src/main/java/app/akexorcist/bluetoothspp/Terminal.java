@@ -1,109 +1,114 @@
 package app.akexorcist.bluetoothspp;
 
 import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.bluetooth.BluetoothAdapter;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.hardware.Sensor;
-import android.hardware.SensorManager;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.StrictMode;
+import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 import com.ubidots.ApiClient;
 import com.ubidots.Variable;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.StatusLine;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Timer;
 
-import app.akexorcist.bluetotohspp.library.BluetoothSPP;
-import app.akexorcist.bluetotohspp.library.BluetoothSPP.BluetoothConnectionListener;
-import app.akexorcist.bluetotohspp.library.BluetoothSPP.OnDataReceivedListener;
 import app.akexorcist.bluetotohspp.library.BluetoothState;
 import app.akexorcist.bluetotohspp.library.DeviceList;
 
-public class Terminal extends Activity {
+public class Terminal extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
-	BluetoothSPP bt;
-    TextView textStatus, numcel, numfer,temp,numcel2,numfer2,numcel3,numfer3;
+//    BluetoothSPP bt;
+    TextView textStatus, numcel, numfer,temp,numcel2,numfer2,numcel3,numfer3,txtResult;
     private Timer timer;
     Menu menu;
     TextView numx, numy, numz;
-	SensorManager sensorManager;
 	Sensor sensor;
 	RelativeLayout l;
     LinearLayout temp1,temp2,temp3,temp4,temp5,temp6,x,y,z;
-    Button b;
     ProgressBar p;
+    ListView list;
+    private IntentFilter mIntentFilter;
+
+    // flag for Internet connection status
+    Boolean isInternetPresent = false;
+    // Connection detector class
+    ConnectionDetector cd;
 
     private Thread thread;
     private Handler handler = new Handler();
-    Double timeStart,timeStop;
     String timeStart2,timeStop2,page,tStart,tStop;
+    private GoogleApiClient googleApiClient=null;
 
-	protected void onCreate(Bundle savedInstanceState) {
+    int nointernet=0;
+    ArrayList<Double> Valuenode1 = new ArrayList<>();
+    ArrayList<Double> Valuenode2 = new ArrayList<>();
+    ArrayList<String> TValuenode1 = new ArrayList<>();
+    ArrayList<String> TValuenode2 = new ArrayList<>();
+
+    ArrayList<String> Tgyro = new ArrayList<>();
+    ArrayList<String> OfflineX = new ArrayList<>();
+    ArrayList<String> OfflineY = new ArrayList<>();
+    ArrayList<String> OfflineZ = new ArrayList<>();
+
+    public static final String mBroadcastStringAction = "app.akexorcist.broadcast.string";
+    public static final String mBroadcastIntegerAction = "app.akexorcist.broadcast.integer";
+    public static final String mBroadcastArrayListAction = "app.akexorcist.broadcast.arraylist";
+
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_terminal);
 
-        HideAct();
-
+//        HideAct();
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-		//sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);//‡√‘Ë¡„™È service
-		//sensor = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
-		
-		numx = (TextView) findViewById(R.id.numx);
-		numy = (TextView) findViewById(R.id.numy);
-		numz = (TextView) findViewById(R.id.numz);
-		
-		final dbTracking myDb = new dbTracking(this);
-		myDb.getWritableDatabase(); // First method
-		//myDb.DeleteData();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.hide();
 
-        Log.i("Check", "onCreate");
-/*
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH.mm");
-        SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH.mm");
-        Date date = new Date();
-        timeStart= Double.parseDouble(dateFormat.format(date));
-        timeStart2= dateFormat2.format(date);
-*/
+        mIntentFilter = new IntentFilter();
+        mIntentFilter.addAction(mBroadcastStringAction);
+        mIntentFilter.addAction(mBroadcastIntegerAction);
+        mIntentFilter.addAction(mBroadcastArrayListAction);
+
+        // Create Google API Client instance
+        googleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(LocationServices.API)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .build();
+
+
+        Log.i("CON", "onCreate");
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
         SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
@@ -120,104 +125,267 @@ public class Terminal extends Activity {
         }
 
         numcel = (TextView)findViewById(R.id.numcel);
-        numfer = (TextView)findViewById(R.id.numfer);
         numcel2 = (TextView)findViewById(R.id.numcel2);
-        numfer2 = (TextView)findViewById(R.id.numfer2);
-        numcel3 = (TextView)findViewById(R.id.numcel3);
-        numfer3 = (TextView)findViewById(R.id.numfer3);
-
+        txtResult = (TextView)findViewById(R.id.gyro);
         textStatus = (TextView)findViewById(R.id.textStatus);
 
-        bt = new BluetoothSPP(this);
+        populateListView();
+        final ListView list=(ListView) findViewById(R.id.listView2);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-        if(!bt.isBluetoothAvailable()) {
-            Toast.makeText(getApplicationContext()
-                    , "Bluetooth is not available"
-                    , Toast.LENGTH_SHORT).show();
-            finish();
-        }
-        
-        bt.setBluetoothConnectionListener(new BluetoothConnectionListener() {
-            public void onDeviceDisconnected() {
-                textStatus.setText("Status : Not connect");
-                menu.clear();
-                getMenuInflater().inflate(R.menu.menu_connection, menu);
-                RelativeLayout layone= (RelativeLayout) findViewById(R.id.layout);// change id here
-                layone.setVisibility(View.INVISIBLE);
-            }
-
-            public void onDeviceConnectionFailed() {
-                textStatus.setText("Status : Connection failed");
-            }
-
-            public void onDeviceConnected(String name, String address) {
-                textStatus.setText("Status : Connected to " + name);
-                menu.clear();
-                getMenuInflater().inflate(R.menu.menu_disconnection, menu);
-
-                ShowAct();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
-                SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
-         		Date date = new Date();
-                tStart= dateFormat.format(date);
-            	timeStart2= dateFormat2.format(date);
-            	Log.v("TimeStart", tStart.toString() + " | " + timeStart2);
-
-                getHttpGet("http://www.tqfsmart.info/delUbidots.php");
-                getHttpGet("http://www.tqfsmart.info/delUbidots2.php");
-                getHttpGet("http://www.tqfsmart.info/delUbidotsG.php");
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                String itemValue = (String) list.getItemAtPosition(position);
+                Log.d("ListItem",itemValue);
+                if(itemValue.equals("หยุดการบันทึก")){
+//                    bt.disconnect();
+                    stopService(new Intent(Terminal.this,RSSPullService.class));
+                }
+                else if(itemValue.equals("กราฟปัจจุบัน")){
+                    Intent intent=new Intent(Terminal.this,RealTime.class);
+                    startActivity(intent);
+                }
+                else if(itemValue.equals("ตั้งค่าแจ้งเตือน")){
+                    Intent intent=new Intent(Terminal.this,SetTemp.class);
+                    startActivity(intent);
+                }
             }
         });
-        // Button(Delete)
-        final Button btn5 = (Button) findViewById(R.id.btnClear);
-        btn5.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-            	myDb.DeleteData();
+        //Choose item select
+        p=(ProgressBar) findViewById(R.id.progressBar);
+        p.setVisibility(View.INVISIBLE);
+//
+//        bt.setDeviceTarget(BluetoothState.DEVICE_OTHER);
+//
+//        if(bt.getServiceState() == BluetoothState.STATE_CONNECTED)
+//            bt.disconnect();
+
+        Intent intent = new Intent(getApplicationContext(), DeviceList.class);
+        startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == BluetoothState.REQUEST_CONNECT_DEVICE) {
+            if(resultCode == Activity.RESULT_OK) {
+                String address = data.getExtras().getString(BluetoothState.EXTRA_DEVICE_ADDRESS);
+                Intent service=new Intent(this, RSSPullService.class);
+                service.putExtra("address", address);
+                startService(service);
+
+//                bt.connect("30:14:09:23:05:19");
+                Log.v("data", address);
             }
-        });
-        
-    }
+        }
+        else if(requestCode == BluetoothState.REQUEST_ENABLE_BT) {
+            if(resultCode == Activity.RESULT_OK) {
+//                bt.setupService();
+//                bt.startService(BluetoothState.DEVICE_OTHER);
 
-    public class ApiUbidots extends AsyncTask<Double, Void, Void> {
-        private final String API_KEY = "ce3bdae0671276a0a8f26f8655def30839f5a894";
-        private final String VARIABLE_ID = "55ded3327625424a0f32fdcc";
+//                bt.send("reset", true);
 
-        @Override
-        protected Void doInBackground(Double... params) {
-            ApiClient apiClient = new ApiClient(API_KEY);
-            Variable TempLevel = apiClient.getVariable(VARIABLE_ID);
-
-            TempLevel.saveValue(params[0]);
-
-            return null;
+                Log.d("onActivityResult", "setup");
+            } else {
+                Toast.makeText(getApplicationContext()
+                        , "Bluetooth was not enabled."
+                        , Toast.LENGTH_SHORT).show();
+                finish();
+            }
         }
     }
-    public class ApiUbidots2 extends AsyncTask<Double, Void, Void> {
-        private final String API_KEY = "ce3bdae0671276a0a8f26f8655def30839f5a894";
-        private final String VARIABLE_ID = "55a738267625422d450e912a";
+
+    float Dcel1 = (float) 0.00;
+    float Dcel2 = (float) 0.00;
+    private BroadcastReceiver mReceiver=new BroadcastReceiver(){
 
         @Override
-        protected Void doInBackground(Double... params) {
-            ApiClient apiClient = new ApiClient(API_KEY);
-            Variable TempLevel = apiClient.getVariable(VARIABLE_ID);
+        public void onReceive(Context context, Intent intent) {
 
-            TempLevel.saveValue(params[0]);
+            cd = new ConnectionDetector(getApplicationContext());
+            isInternetPresent = cd.isConnectingToInternet();
 
-            return null;
+            count = count + 1;
+
+            final Toast toast = Toast.makeText(getApplicationContext(),"No Network", Toast.LENGTH_SHORT);
+
+            if (intent.getAction().equals(mBroadcastStringAction)) {
+                if(intent.getStringExtra("Status") !=null) {
+                    String status=(intent.getStringExtra("Status"));
+                    Log.v("Status Page",status);
+                    Log.v("Status context",getApplicationContext().toString());
+
+                    if(status.equals("onDeviceDisconnected")){
+//                        /stopService(new Intent(Terminal.this,RSSPullService.class));
+                        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                        SharedPreferences sp = getSharedPreferences("TimeHistory", Context.MODE_PRIVATE);
+
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+                        SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
+                        Date date = new Date();
+                        tStop = dateFormat.format(date);
+                        timeStop2 = dateFormat2.format(date);
+
+                        SharedPreferences.Editor editor = sp.edit();
+                        editor.clear();
+                        editor.putString("Page", "Terminal");
+                        editor.putString("tStart", tStart);
+                        editor.putString("TimeStart2", timeStart2);
+                        editor.putString("tStop", tStop);
+                        editor.putString("TimeStop2", timeStop2);
+                        editor.putString("imei",telephonyManager.getDeviceId());
+                        Log.v("shared", tStart + " " + timeStart2 + "  " + tStop + " " + timeStop2);
+                        editor.commit();
+
+                        Intent in = new Intent(Terminal.this, MainHistory.class);
+                        in.putExtra("Page", "Terminal");
+                        in.putExtra("tStart", tStart);
+                        in.putExtra("TimeStart2", timeStart2);
+                        in.putExtra("tStop", tStop);
+                        in.putExtra("TimeStop2", timeStop2);
+                        in.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                        bt.disconnect();
+                        Log.v("onDeviceDisconnected","onDeviceDisconnected1");
+                        startActivity(in);
+                    }
+                    if(status.equals("onDeviceConnectFailed")){
+                        textStatus.setText("Status : Connection failed");
+                        stopService(new Intent(Terminal.this,RSSPullService.class));
+                        Toast.makeText(getApplicationContext(), "Device Connection Failed Go to back page", Toast.LENGTH_LONG).show();
+
+                        Intent in = new Intent(Terminal.this, Home.class);
+                        Log.v("onDeviceConnectFailed","onDeviceConnectFailed HOme");
+                        startActivity(in);
+                    }
+                    if(status.equals("onDeviceConnect")){
+                        if(intent.getStringExtra("StatusName") !=null) {
+                            textStatus.setText("Status : Connected to " + intent.getStringExtra("StatusName"));
+                            menu.clear();
+                            getMenuInflater().inflate(R.menu.menu_disconnection, menu);
+
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+                            SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
+                            Date date = new Date();
+                            tStart = dateFormat.format(date);
+                            timeStart2 = dateFormat2.format(date);
+                            Log.v("TimeStartRss", tStart.toString() + " | " + timeStart2.toString());
+                        }
+                    }
+                }
+            }
+
+            Log.i("Count Terminal", String.valueOf(count));
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            Date date = new Date();
+
+            toast.cancel();
+
+            SharedPreferences sp = getSharedPreferences("TempNotification", Context.MODE_PRIVATE);
+            float maxnode1 = sp.getFloat("MaxNode1", 25);
+            float minnode1 = sp.getFloat("MinNode1", 20);
+            float maxnode2 = sp.getFloat("MaxNode2", 25);
+            float minnode2 = sp.getFloat("MinNode2", 20);
+
+            if (intent.getAction().equals(mBroadcastStringAction)) {
+                if(intent.getStringExtra("numcel") !=null) {
+                    numcel.setText(intent.getStringExtra("numcel") + " C ํ");
+                    Dcel1 = Float.parseFloat(intent.getStringExtra("numcel"));
+                }
+            }
+            if (intent.getAction().equals(mBroadcastStringAction)) {
+                if(intent.getStringExtra("numcel2") !=null) {
+                    numcel2.setText(intent.getStringExtra("numcel2") + " C ํ");
+                    Dcel2 = Float.parseFloat(intent.getStringExtra("numcel2"));
+                }
+            }
+            numcel.setTextColor(Color.parseColor("#050505"));
+
+            Log.i("Dcel1 : maxnode1", Dcel1 + " " + Float.toString(maxnode1));
+            if (Dcel1 > maxnode1) {
+                numcel.setTextColor(Color.parseColor("#FF0000"));
+            }
+            if (Dcel1 <= minnode1) {
+                numcel.setTextColor(Color.parseColor("#c4c403"));
+            }
+
+            numcel2.setTextColor(Color.parseColor("#050505"));
+
+            Log.i("Dcel2 : maxnode2", Dcel2 + " " + Float.toString(maxnode2));
+            if (Dcel2 > maxnode2) {
+                numcel2.setTextColor(Color.parseColor("#FF0000"));
+            }
+            if (Dcel2 <= minnode2) {
+                numcel2.setTextColor(Color.parseColor("#c4c403"));
+            }
+            SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            String x="";
+            String y="";
+            String z="";
+            double result=0.0;
+            if (intent.getAction().equals(mBroadcastStringAction)) {
+                if(intent.getStringExtra("txtResult")!=null && intent.getStringExtra("x")!=null
+                        && intent.getStringExtra("y")!=null && intent.getStringExtra("z")!=null ) {
+                    txtResult.setText(intent.getStringExtra("txtResult"));
+                    x = intent.getStringExtra("x");
+                    y = intent.getStringExtra("y");
+                    z = intent.getStringExtra("z");
+
+                    result = CalResultVator(Integer.parseInt(x), Integer.parseInt(y), Integer.parseInt(z));
+                    txtResult.setText(String.valueOf(result));
+                }
+            }
         }
+    };
+
+    int overRange=0;
+    private void setup() {
+        //bt.autoConnect("HC-05");
+        //bt.send("reset",true);
     }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+
+//        Toast.makeText(this,"connect location api",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Toast.makeText(this,"onConnectionSuspended",Toast.LENGTH_LONG).show();
+    }
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Toast.makeText(this,"onConnectionFailed",Toast.LENGTH_LONG).show();
+    }
+
+    float lat= (float) 0.00;
+    float lng= (float) 0.00;
+    @Override
+    public void onLocationChanged(Location location) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+
+        lat=(float)location.getLatitude();
+        lng=(float)location.getLongitude();
+//        insertTOserverLocation(dateFormat.format(date), location.getLatitude(), location.getLongitude());
+    }
+
     public class ApiUbidotsG extends AsyncTask<Double, Void, Void> {
         private final String API_KEY = "ce3bdae0671276a0a8f26f8655def30839f5a894";
         private final String VARIABLE_ID = "55a738317625422a17882088";
 
         @Override
         protected Void doInBackground(Double... params) {
-            ApiClient apiClient = new ApiClient(API_KEY);
-            Variable TempLevel = apiClient.getVariable(VARIABLE_ID);
+            try {
+                ApiClient apiClient = new ApiClient(API_KEY);
+                Variable TempLevel = apiClient.getVariable(VARIABLE_ID);
 
-            TempLevel.saveValue(params[0]);
-            //TempLevel.
-
+                TempLevel.saveValue(params[0]);
+            }
+            catch (Exception ex){
+                Log.v("Exception UbidotsG",ex.toString());
+            }
             return null;
         }
     }
@@ -227,396 +395,79 @@ public class Terminal extends Activity {
         return true;
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if(id == R.id.menu_android_connect) {
-            bt.setDeviceTarget(BluetoothState.DEVICE_ANDROID);
-			
-			if(bt.getServiceState() == BluetoothState.STATE_CONNECTED)
-    			bt.disconnect();
-            Intent intent = new Intent(getApplicationContext(), DeviceList.class);
-            startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
-        } else if(id == R.id.menu_device_connect) {
-            p=(ProgressBar) findViewById(R.id.progressBar);
-            p.setVisibility(View.VISIBLE);
-            bt.setDeviceTarget(BluetoothState.DEVICE_OTHER);
-			
-			if(bt.getServiceState() == BluetoothState.STATE_CONNECTED)
-    			bt.disconnect();
-            Intent intent = new Intent(getApplicationContext(), DeviceList.class);
-            startActivityForResult(intent, BluetoothState.REQUEST_CONNECT_DEVICE);
-        } else if(id == R.id.menu_disconnect) {
-            if(bt.getServiceState() == BluetoothState.STATE_CONNECTED){
-                bt.disconnect();
-                Intent in=new Intent(this,Home.class);
-                startActivity(in);
-            }
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     public void onDestroy() {
         super.onDestroy();
-        //bt.stopService();
+        Log.d("CON", "in onDestroy");
+
+        if (googleApiClient != null && googleApiClient.isConnected()) {
+            googleApiClient.disconnect();
+        }
+        stopService(new Intent(Terminal.this, RSSPullService.class));
+        //Log.v("CON",cooo+"");
     }
 
     public void onStart() {
         super.onStart();
-        if (!bt.isBluetoothEnabled()) {
-            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(intent, BluetoothState.REQUEST_ENABLE_BT);
-        } else {
-            if(!bt.isServiceAvailable()) {
-                bt.setupService();
-                bt.startService(BluetoothState.DEVICE_OTHER);
-                showTemp();
-            }
-        }
+        Log.d("onStart", "in onStart");
+
+        googleApiClient.connect();
     }
-    
     public void onResume() {
-		super.onResume();
-		//sensorManager.registerListener(gyroListener, sensor,
-                //SensorManager.SENSOR_DELAY_NORMAL);
-	}
- 
-	public void onStop() {
-		super.onStop();
-		//sensorManager.unregisterListener(gyroListener);
+        super.onResume();
+        Log.d("CON", "in onResume");
 
-	}
-    /*
-	public SensorEventListener gyroListener = new SensorEventListener() {
-		public void onAccuracyChanged(Sensor sensor, int acc) { }
- 
-		public void onSensorChanged(SensorEvent event) {
-			
-			float x = event.values[0];
-			float y = event.values[1];
-			float z = event.values[2];
+        registerReceiver(mReceiver, mIntentFilter);
 
-			numx.setText("X :  " + (int)x + "  rad/s");
-			numy.setText("Y :  " + (int)y + "  rad/s");
-			numz.setText("Z :  " + (int)z + "  rad/s");
-			
-			if((int)x>2 || (int)x<-2 || (int)y>2 || (int)y<-2 || (int)z>2 || (int)z<-2)
-				InsertGyro((int)x,(int)y,(int)z);
-		}
-	};*/
-	public void InsertGyro(double x,double y,double z){
-		final dbTracking myDb = new dbTracking(this);
-		myDb.getWritableDatabase(); // First method
-		
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH.mm");
- 		Date date = new Date();
-    	myDb.InsertDataGyro(dateFormat.format(date), x, y, z);
-    	Log.v("showGyro", dateFormat.format(date) + "," + x + "," + y + "," + z);
-    	
-	}
-    int count=0;
-    public void showTemp() {
-    	final dbTracking myDb = new dbTracking(this);
-		myDb.getWritableDatabase(); // First method
+        SharedPreferences sp = getSharedPreferences("TimeHistory", Context.MODE_PRIVATE);
+        page = sp.getString("Page", "");
 
-    	thread = new Thread() {
-            public void run() {
-                while (true) {
-                    try {
-                        bt.setOnDataReceivedListener(new OnDataReceivedListener() {
-
-                            public void onDataReceived(byte[] data, String message) {
-                                count=count+1;
-                                String hallostring = message;
-                                String cel = null;
-
-                                //Log.i("Count", String.valueOf(count));
-                                //Log.i("Check", "Message : " + hallostring.length());
-                                //Toast.makeText(Terminal.this, hallostring.length(), Toast.LENGTH_SHORT).show();
-                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                                Date date = new Date();
-
-                                if(count>=300) {
-                                    count = 0;
-                                }
-                                if(count<=6) {
-                                    if (hallostring.length() == 27) {
-                                        String node = hallostring.substring(0, 5);
-                                        cel = hallostring.substring(8, 13);
-                                        String fer = hallostring.substring(18, 23);
-                                        double tc = Double.parseDouble(cel);
-
-                                        SharedPreferences sp = getSharedPreferences("TempNotification", Context.MODE_PRIVATE);
-                                        float maxnode1=sp.getFloat("MaxNode1", -1);
-                                        float minnode1=sp.getFloat("MinNode1", -1);
-                                        float maxnode2=sp.getFloat("MaxNode2", -1);
-                                        float minnode2=sp.getFloat("MinNode2", -1);
-                                        float maxnode3=sp.getFloat("MaxNode3", -1);
-                                        float minnode3=sp.getFloat("MinNode3", -1);
-
-                                        if (node.equals("node1")) {
-                                            numcel.setText(cel);
-                                            numfer.setText(fer);
-                                            numcel.setTextColor(Color.parseColor("#FFFFFF"));
-                                            numfer.setTextColor(Color.parseColor("#FFFFFF"));
-                                            myDb.InsertDataTemp(dateFormat.format(date), tc, "node1");//insert temp to sqllite
-                                            insertTOserver(dateFormat.format(date), tc, "node1");//insert temp to server
-
-
-                                            new ApiUbidots().execute(tc);//send to ubidots
-
-                                            float fc=Float.parseFloat(cel);
-                                            Log.i("fc : maxnode1", fc+" "+Float.toString(maxnode1));
-                                            if(fc>maxnode1){
-                                                numcel.setTextColor(Color.parseColor("#FF0000"));
-                                                numfer.setTextColor(Color.parseColor("#FF0000"));
-                                                Toast.makeText(getApplicationContext(), "ขณะนี้เซนเซอร์ที่1อุณหภูมิมากกว่า "+maxnode1+" C", Toast.LENGTH_SHORT).show();
-                                                createNotificationH("ขณะนี้เซนเซอร์ที่1อุณหภูมิมากกว่า " + maxnode1 + " C");
-                                            }
-                                            if(fc<=minnode1){
-                                                numcel.setTextColor(Color.parseColor("#FFFF66"));
-                                                numfer.setTextColor(Color.parseColor("#FFFF66"));
-                                                Toast.makeText(getApplicationContext(), "ขณะนี้เซนเซอร์ที่1อุณหภูมิต่ำกว่า "+minnode1+" C", Toast.LENGTH_SHORT).show();
-                                                createNotificationL("ขณะนี้เซนเซอร์ที่1อุณหภูมิต่ำกว่า " + minnode1 + " C");
-                                            }
-                                        }
-
-                                        if (node.equals("node2")) {
-                                            numcel2.setText(cel);
-                                            numfer2.setText(fer);
-                                            numcel2.setTextColor(Color.parseColor("#FFFFFF"));
-                                            numfer2.setTextColor(Color.parseColor("#FFFFFF"));
-                                            myDb.InsertDataTemp(dateFormat.format(date), tc, "node2");
-                                            insertTOserver(dateFormat.format(date), tc, "node2");//insert temp to server
-
-                                            new ApiUbidots2().execute(tc);//send to ubidots
-                                            float fc=Float.parseFloat(cel);
-
-                                            Log.i("fc : maxnode2", fc+" "+Float.toString(maxnode2));
-                                            if(fc>maxnode2){
-                                                numcel2.setTextColor(Color.parseColor("#FF0000"));
-                                                numfer2.setTextColor(Color.parseColor("#FF0000"));
-                                                Toast.makeText(getApplicationContext(), "ขณะนี้เซนเซอร์ที่2อุณหภูมิมากกว่า "+maxnode2+" C", Toast.LENGTH_SHORT).show();
-                                                createNotificationH("ขณะนี้เซนเซอร์ที่2อุณหภูมิมากกว่า " + maxnode2 + " C");
-                                            }
-                                            if(fc<=minnode2){
-                                                numcel2.setTextColor(Color.parseColor("#FFFF66"));
-                                                numfer2.setTextColor(Color.parseColor("#FFFF66"));
-                                                Toast.makeText(getApplicationContext(), "ขณะนี้เซนเซอร์ที่2อุณหภูมิต่ำกว่า "+minnode2+" C", Toast.LENGTH_SHORT).show();
-                                                createNotificationL("ขณะนี้เซนเซอร์ที่2อุณหภูมิต่ำกว่า " + minnode2 + " C");
-                                            }
-                                        }
-                                        if (node.equals("nodeg")) {
-                                            numcel3.setText(cel);
-                                            numfer3.setText(fer);
-                                            numcel3.setTextColor(Color.parseColor("#FFFFFF"));
-                                            numfer3.setTextColor(Color.parseColor("#FFFFFF"));
-                                            myDb.InsertDataTemp(dateFormat.format(date), tc, "nodeg");
-                                            insertTOserver(dateFormat.format(date), tc, "nodeg");//insert temp to server
-
-                                            new ApiUbidotsG().execute(tc);//send to ubidots
-
-                                            float fc=Float.parseFloat(cel);
-                                            Log.i("fc : maxnode3", fc+" "+Float.toString(maxnode3));
-                                            if(fc>maxnode3){
-                                                numcel3.setTextColor(Color.parseColor("#FF0000"));
-                                                numfer3.setTextColor(Color.parseColor("#FF0000"));
-                                                Toast.makeText(getApplicationContext(), "ขณะนี้เซนเซอร์ที่3อุณหภูมิมากกว่า "+maxnode3+" C", Toast.LENGTH_SHORT).show();
-                                                createNotificationH("ขณะนี้เซนเซอร์ที่3อุณหภูมิมากกว่า " + maxnode3 + " C");
-                                            }
-                                            if(fc<=minnode3){
-                                                numcel3.setTextColor(Color.parseColor("#FFFF66"));
-                                                numfer3.setTextColor(Color.parseColor("#FFFF66"));
-                                                Toast.makeText(getApplicationContext(), "ขณะนี้เซนเซอร์ที่3อุณหภูมิต่ำกว่า "+minnode3+" C", Toast.LENGTH_SHORT).show();
-                                                createNotificationL("ขณะนี้เซนเซอร์ที่3อุณหภูมิต่ำกว่า " + minnode3 + " C");
-                                            }
-                                        }
-                                        //Toast.makeText(Terminal.this, hallostring, Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                                if (hallostring.length() < 27) {
-                                    String node[] = hallostring.split("\\,");
-                                    numx.setText("X :  " + node[0].toString() + "  rad/s");
-                                    numy.setText("Y :  " + node[1].toString() + "  rad/s");
-                                    numz.setText("Z :  " + node[2].toString() + "  rad/s");
-                                    insertGyroTOserver(node[0].toString(), node[1].toString(), node[2].toString(), dateFormat.format(date));
-                                }
-                            }
-
-                        });
-                        Thread.sleep(60000);
-                    } catch (InterruptedException e) {
-                        Log.e("check", "local Thread error", e);
-                    }
-                }
-            }
-        };
-        thread.start();
-
+        Log.d("Page", page);
+        if(page.equals("MainHistory")) {
+            Intent intent=new Intent(Terminal.this,Home.class);
+            startActivity(intent);
+        }
+//        stopService(new Intent(this, RSSPullService.class));
     }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(mReceiver);
+        super.onPause();
+//        startService(new Intent(this, RSSPullService.class));
+        Log.d("CON", "onPause");
+    }
+
+    public void onStop() {
+		super.onStop();
+
+	}
+
+    int count=0;
     private Double CalResultVator(int x,int y,int z){
         double result=0;
         double resultVactor=0;
         result=((x*x)+(y*y)+(z*z));
         resultVactor=Math.sqrt(result);
+        Log.v("CalResultVator", String.valueOf(resultVactor));
         return resultVactor;
     }
-    public String getHttpGet(String url) {
-        StringBuilder str = new StringBuilder();
-        HttpClient client = new DefaultHttpClient();
-        HttpGet httpGet = new HttpGet(url);
 
-        try {
-            HttpResponse response = client.execute(httpGet);
-            StatusLine statusLine = response.getStatusLine();
-            int statusCode = statusLine.getStatusCode();
-            if (statusCode == 200) { // Status OK
-                HttpEntity entity = response.getEntity();
-                InputStream content = entity.getContent();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    str.append(line);
-                }
-            } else {
-                Log.e("Log", "Failed to download result..");
-            }
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return str.toString();
-    }
+    private void populateListView() {
+        String[] itemname ={
+                "หยุดการบันทึก",
+                "กราฟปัจจุบัน",
+                "ตั้งค่าแจ้งเตือน"
+        };
 
-    public void insertTOserver(String dt, double temp,String node){
-        try {
-            ArrayList<NameValuePair> nameValuePairs=new ArrayList<NameValuePair>();
-            nameValuePairs.add(new BasicNameValuePair("isAdd","true"));
-            nameValuePairs.add(new BasicNameValuePair("time",dt));
-            nameValuePairs.add(new BasicNameValuePair("tem",Double.toString(temp)));
-            nameValuePairs.add(new BasicNameValuePair("node",node));
+        Integer[] imgid={
+                R.drawable.i_stop,
+                R.drawable.i_graph,
+                R.drawable.i_setting,
+        };
+        CustomListAdapter adapter=new CustomListAdapter(this, itemname, imgid);
 
-            HttpClient httpclient =new DefaultHttpClient();
-            HttpPost httppost=new HttpPost("http://tqfsmart.info/addDATA.php");
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs,"UTF-8"));
-            httpclient.execute(httppost);
-        }
-        catch (Exception e){
-            Log.d("log_err", "Error in http connection" + e.toString());
-        }
-    }
-    public void insertGyroTOserver(String x, String y,String z, String dt){
-        try {
-            ArrayList<NameValuePair> nameValuePairs=new ArrayList<NameValuePair>();
-            nameValuePairs.add(new BasicNameValuePair("isAdd","true"));
-            nameValuePairs.add(new BasicNameValuePair("x",x));
-            nameValuePairs.add(new BasicNameValuePair("y",y));
-            nameValuePairs.add(new BasicNameValuePair("z",z));
-            nameValuePairs.add(new BasicNameValuePair("time",dt));
-
-            HttpClient httpclient =new DefaultHttpClient();
-            HttpPost httppost=new HttpPost("http://tqfsmart.info/addGyro.php");
-            httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs,"UTF-8"));
-            httpclient.execute(httppost);
-        }
-        catch (Exception e){
-            Log.d("log_err", "Error in http connection" + e.toString());
-        }
-    }
-    public void createNotificationH(String m) {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-        Notification notification = new Notification(android.R.drawable.stat_notify_error,
-                "New notification", System.currentTimeMillis());
-
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-
-        String Title = "Warning";
-        String Message = m;
-
-        Intent intent = new Intent(this, TemperatureHigh.class);
-        PendingIntent activity = PendingIntent.getActivity(this, 0, intent, 0);
-        notification.setLatestEventInfo(this, Title, Message, activity);
-        notification.number += 1;
-        notification.defaults = Notification.DEFAULT_ALL; // Sound Vibrate Light
-        notificationManager.notify(1, notification);
-    }
-    public void createNotificationL(String m) {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-        Notification notification = new Notification(android.R.drawable.stat_notify_error,
-                "New notification", System.currentTimeMillis());
-
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-
-        String Title = "Warning";
-        String Message = m;
-
-        Intent intent = new Intent(this, TemperatureLow.class);
-        PendingIntent activity = PendingIntent.getActivity(this, 0, intent, 0);
-        notification.setLatestEventInfo(this, Title, Message, activity);
-        notification.number += 1;
-        notification.defaults = Notification.DEFAULT_ALL; // Sound Vibrate Light
-        notificationManager.notify(1, notification);
-    }
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == BluetoothState.REQUEST_CONNECT_DEVICE) {
-            if(resultCode == Activity.RESULT_OK)
-                bt.connect(data);
-        } else if(requestCode == BluetoothState.REQUEST_ENABLE_BT) {
-            if(resultCode == Activity.RESULT_OK) {
-                bt.setupService();
-                bt.startService(BluetoothState.DEVICE_OTHER);
-                //Log.d("onActivityResult", "WTF");
-                //setup();
-            } else {
-                Toast.makeText(getApplicationContext()
-                        , "Bluetooth was not enabled."
-                        , Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        }
-    }
-    public void onclickGraph(View view){
-        /*
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH.mm");
-        SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH.mm");
-        Date date = new Date();
-        timeStop= Double.parseDouble(dateFormat.format(date));
-        timeStop2= dateFormat2.format(date);
-        Log.v("TimeStart",timeStop.toString());
-        Intent intent = new Intent(this,Graph.class);
-        intent.putExtra("Page","Terminal");
-        intent.putExtra("TimeStart", timeStart);
-        intent.putExtra("TimeStart2", timeStart2);
-        intent.putExtra("TimeStop", timeStop);
-        intent.putExtra("TimeStop2", timeStop2);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        bt.disconnect();
-        startActivity(intent);*/
-
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
-        SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
-        tStop= dateFormat.format(date);
-        timeStop2= dateFormat2.format(date);
-        Intent intent = new Intent(this,GoogleGraph.class);
-        intent.putExtra("Page","Terminal");
-        intent.putExtra("tStart", tStart);
-        intent.putExtra("TimeStart2", timeStart2);
-        intent.putExtra("tStop", tStop);
-        intent.putExtra("TimeStop2", timeStop2);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        bt.disconnect();
-        startActivity(intent);
-    }
-    public void onclickShowTemp(View view){
-        Intent intent=new Intent(this,SetTemp.class);
-        startActivity(intent);
-    }
-    public void onclickRealTime(View view){
-        Intent intent=new Intent(this,RealTime.class);
-        startActivity(intent);
+        ListView list=(ListView)findViewById(R.id.listView2);
+        list.setAdapter(adapter);
     }
     private void HideAct() {
         textStatus=(TextView) findViewById(R.id.textStatus);
@@ -628,32 +479,11 @@ public class Terminal extends Activity {
 
         temp1=(LinearLayout) findViewById(R.id.temp1);
         temp1.setVisibility(View.INVISIBLE);
-        temp2=(LinearLayout) findViewById(R.id.temp2);
-        temp2.setVisibility(View.INVISIBLE);
-        temp3=(LinearLayout) findViewById(R.id.temp3);
-        temp3.setVisibility(View.INVISIBLE);
-        temp4=(LinearLayout) findViewById(R.id.temp4);
-        temp4.setVisibility(View.INVISIBLE);
-        temp5=(LinearLayout) findViewById(R.id.temp5);
-        temp5.setVisibility(View.INVISIBLE);
-        temp6=(LinearLayout) findViewById(R.id.temp6);
-        temp6.setVisibility(View.INVISIBLE);
 
-        x=(LinearLayout) findViewById(R.id.x);
-        x.setVisibility(View.INVISIBLE);
-        y=(LinearLayout) findViewById(R.id.y);
-        y.setVisibility(View.INVISIBLE);
-        z=(LinearLayout) findViewById(R.id.z);
-        z.setVisibility(View.INVISIBLE);
-
-        b=(Button) findViewById(R.id.btnShowTemp);
-        b.setVisibility(View.INVISIBLE);
-        b=(Button) findViewById(R.id.btnRealTime);
-        b.setVisibility(View.INVISIBLE);
-        b=(Button) findViewById(R.id.btnGraph);
-        b.setVisibility(View.INVISIBLE);
         p=(ProgressBar) findViewById(R.id.progressBar);
         p.setVisibility(View.INVISIBLE);
+        list=(ListView) findViewById(R.id.listView2);
+        list.setVisibility(View.INVISIBLE);
         //l=(RelativeLayout) findViewById(R.id.layout);
         //l.setVisibility(View.INVISIBLE);
 
@@ -671,32 +501,45 @@ public class Terminal extends Activity {
 
         temp1=(LinearLayout) findViewById(R.id.temp1);
         temp1.setVisibility(View.VISIBLE);
-        temp2=(LinearLayout) findViewById(R.id.temp2);
-        temp2.setVisibility(View.VISIBLE);
-        temp3=(LinearLayout) findViewById(R.id.temp3);
-        temp3.setVisibility(View.VISIBLE);
-        temp4=(LinearLayout) findViewById(R.id.temp4);
-        temp4.setVisibility(View.VISIBLE);
-        temp5=(LinearLayout) findViewById(R.id.temp5);
-        temp5.setVisibility(View.VISIBLE);
-        temp6=(LinearLayout) findViewById(R.id.temp6);
-        temp6.setVisibility(View.VISIBLE);
 
-        x=(LinearLayout) findViewById(R.id.x);
-        x.setVisibility(View.VISIBLE);
-        y=(LinearLayout) findViewById(R.id.y);
-        y.setVisibility(View.VISIBLE);
-        z=(LinearLayout) findViewById(R.id.z);
-        z.setVisibility(View.VISIBLE);
-
-        b=(Button) findViewById(R.id.btnShowTemp);
-        b.setVisibility(View.VISIBLE);
-        b=(Button) findViewById(R.id.btnRealTime);
-        b.setVisibility(View.VISIBLE);
-        b=(Button) findViewById(R.id.btnGraph);
-        b.setVisibility(View.VISIBLE);
         p=(ProgressBar) findViewById(R.id.progressBar);
         p.setVisibility(View.INVISIBLE);
+        list=(ListView) findViewById(R.id.listView2);
+        list.setVisibility(View.VISIBLE);
     }
 
+
+    public static String createQueryString(HashMap<String, String> queryParameters)
+    {
+        StringBuilder builder = new StringBuilder();
+        boolean first = true;
+        for (String key : queryParameters.keySet())
+        {
+            String value = queryParameters.get(key).toString();
+
+            try
+            {
+                String encodedValue = URLEncoder.encode(value, "UTF-8");
+//                System.out.println("Value: "+encodedValue);
+
+                if(first)
+                {
+                    builder.append("?");
+                    first = false;
+                }
+                else
+                {
+                    builder.append("&");
+                }
+
+                builder.append(key).append("=").append(encodedValue);
+            }
+            catch (UnsupportedEncodingException e)
+            {
+                e.printStackTrace();
+            }
+        }
+
+        return builder.toString();
+    }
 }

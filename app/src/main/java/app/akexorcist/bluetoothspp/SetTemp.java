@@ -25,12 +25,12 @@ public class SetTemp extends Activity {
         EditText mEdit32   = (EditText)findViewById(R.id.edit32);
 
         SharedPreferences sp = getSharedPreferences("TempNotification", Context.MODE_PRIVATE);
-        float maxnode1=sp.getFloat("MaxNode1", -1);
-        float minnode1=sp.getFloat("MinNode1", -1);
-        float maxnode2=sp.getFloat("MaxNode2", -1);
-        float minnode2=sp.getFloat("MinNode2", -1);
-        float maxnode3=sp.getFloat("MaxNode3", -1);
-        float minnode3=sp.getFloat("MinNode3", -1);
+        float maxnode1=sp.getFloat("MaxNode1", 25);
+        float minnode1=sp.getFloat("MinNode1", 20);
+        float maxnode2=sp.getFloat("MaxNode2", 25);
+        float minnode2=sp.getFloat("MinNode2", 20);
+        float maxnode3=sp.getFloat("MaxNode3", 25);
+        float minnode3=sp.getFloat("MinNode3", 20);
 
         mEdit11.setText(Float.toString(maxnode1));
         mEdit12.setText(Float.toString(minnode1));
@@ -75,6 +75,12 @@ public class SetTemp extends Activity {
                 ||mEdit21n.getText().toString().matches("") || mEdit22n.getText().toString().matches("")
                 ||mEdit31n.getText().toString().matches("") || mEdit32n.getText().toString().matches("") ){
             Toast.makeText(this,"กรุณาใส่ข้อมูลให้ครบทุกช่อง",Toast.LENGTH_SHORT).show();
+        }
+        if((Double.parseDouble(mEdit11n.getText().toString())) <= (Double.parseDouble(mEdit12n.getText().toString())) ||
+                (Double.parseDouble(mEdit21n.getText().toString())) <= (Double.parseDouble(mEdit22n.getText().toString())) ||
+                (Double.parseDouble(mEdit31n.getText().toString())) <= (Double.parseDouble(mEdit32n.getText().toString())))
+        {
+            Toast.makeText(this,"กรุณาใส่ข้อมูลให้ถูกต้อง",Toast.LENGTH_SHORT).show();
         }
         else {
             float maxnode11 = Float.parseFloat(mEdit11n.getText().toString());

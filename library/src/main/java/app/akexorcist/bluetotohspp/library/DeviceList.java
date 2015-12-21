@@ -17,8 +17,6 @@
 
 package app.akexorcist.bluetotohspp.library;
 
-import java.util.Set;
-
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -30,14 +28,16 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
+
+import java.util.Set;
 
 @SuppressLint("NewApi")
 public class DeviceList extends Activity {
@@ -181,7 +181,8 @@ public class DeviceList extends Activity {
 	            // Create the result Intent and include the MAC address
 	            Intent intent = new Intent();
 	            intent.putExtra(BluetoothState.EXTRA_DEVICE_ADDRESS, address);
-	
+
+                Log.v("address",address);
 	            // Set result and finish this Activity
 	            setResult(Activity.RESULT_OK, intent);
 	            finish();

@@ -16,9 +16,6 @@
 
 package app.akexorcist.bluetotohspp.library;
 
-import java.util.ArrayList;
-import java.util.Set;
-
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -28,6 +25,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Set;
 
 @SuppressLint("NewApi")
 public class BluetoothSPP {
@@ -226,6 +226,7 @@ public class BluetoothSPP {
     
     public void connect(Intent data) {
         String address = data.getExtras().getString(BluetoothState.EXTRA_DEVICE_ADDRESS);
+        Log.v("addressin",address);
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
         mChatService.connect(device);
     }
@@ -286,6 +287,8 @@ public class BluetoothSPP {
             if(CRLF) 
                 data += "\r\n"; 
             mChatService.write(data.getBytes());
+            Log.d("reset", "it send reset");
+
         }
     }
     
