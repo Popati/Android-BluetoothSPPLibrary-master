@@ -179,9 +179,10 @@ public class History extends Activity {
 				String time1 = jsonChildNode.getString("TimeStart");
 				String dateStop = jsonChildNode.getString("DateStop");
 				String time2 = jsonChildNode.getString("TimeStop");
+				String imei = jsonChildNode.getString("device_id");
 				String outPut = dateStart+" "+time1.substring(0,5)+ " - " + dateStop+" "+time2.substring(0,5);
-//				System.out.print(outPut);
-				Log.v("myItems", outPut);
+
+				Log.v("myItems", imei);
 				employeeList.add(createEmployee("employees", outPut));
 			}
 		} catch (JSONException e) {

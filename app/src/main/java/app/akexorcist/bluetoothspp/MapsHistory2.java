@@ -64,15 +64,15 @@ public class MapsHistory2 extends Fragment implements OnMapReadyCallback {
         imei = sp.getString("imei",null);
         Log.v("shared maps",tStart+" "+timeStart2+"  "+tStop+" "+timeStop2+" "+page);
 
-        if(page.equals("Terminal")) {
+//        if(page.equals("Terminal")) {
             url = "http://www.tqfsmart.info/ListLocationHistory.php?fi=" + timeStart2.trim() + "%20"
                     + tStart.trim() + ":00&ff=" + timeStop2.trim() + "%20" + tStop.trim()
-                    + ":00&imei="+imei;
+                    + ":00";
 
             Log.v("url",url);
             accessWebService();
             Log.v("MapsHistory2", "2");
-        }
+//        }
 //        fragment.getMapAsync(this);
 
 //        WebView myWebView = (WebView) rootView.findViewById(R.id.webview1);
