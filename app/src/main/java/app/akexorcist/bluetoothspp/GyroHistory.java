@@ -38,8 +38,8 @@ public class GyroHistory extends Fragment {
         WebView myWebView = (WebView) rootView.findViewById(R.id.webview1);
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-        String url="http://www.tqfsmart.info/AppSelectGyro.php?fi=" + timeStart2 + "%20"
-                + tStart + ":00&ff=" + timeStop2.trim() + "%20" + tStop.trim() + ":00";
+        String url="http://168.63.175.28/AppSelectGyro.php?fi=" + timeStart2 + "%20"
+                + tStart + ":00&ff=" + timeStop2.trim() + "%20" + tStop.trim() + ":00&imei="+imei.trim();
         Log.v("url", url);
 
         myWebView.loadUrl(url);

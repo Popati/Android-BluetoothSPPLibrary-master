@@ -80,7 +80,8 @@
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/temp1"/>
+        android:layout_below="@+id/temp1"
+        android:visibility="invisible"/>
 
     <ListView
         android:id="@+id/listView2"

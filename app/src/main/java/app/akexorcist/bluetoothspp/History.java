@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -37,10 +36,10 @@ import java.util.Map;
 public class History extends Activity {
 
 	private String jsonResult;
-	private String url = "http://www.tqfsmart.info/ListHistory.php";
+	private String url = "";
 	private ListView listView;
 	ProgressBar p;
-
+	String imei;
 	// flag for Internet connection status
 	Boolean isInternetPresent = false;
 	// Connection detector class
@@ -56,6 +55,10 @@ public class History extends Activity {
 		if(isInternetPresent) {
 
 			//populateListView();
+			SharedPreferences sp = getSharedPreferences("TimeHistory", Context.MODE_PRIVATE);
+			imei=sp.getString("device", null);
+//			Toast.makeText(History.this, imei, Toast.LENGTH_LONG).show();
+			url = "http://168.63.175.28/ListHistory.php?imei="+imei;
 
 			listView = (ListView) findViewById(R.id.listView1);
 			accessWebService();
@@ -86,10 +89,8 @@ public class History extends Activity {
 		}
 	}
 
-	Double timeStart,timeStop;
-    String timeStart2,timeStop2;
+
 	public void onclickGraph(String t1,String t2,String st1,String st2){
-		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
 		SharedPreferences sp = getSharedPreferences("TimeHistory", Context.MODE_PRIVATE);
 		SharedPreferences.Editor editor = sp.edit();
@@ -99,7 +100,7 @@ public class History extends Activity {
 		editor.putString("TimeStart2", t1);
 		editor.putString("tStop", st2);
 		editor.putString("TimeStop2", t2);
-		editor.putString("imei",telephonyManager.getDeviceId());
+		editor.putString("imei", imei);
 		editor.commit();
 
 		Intent intent = new Intent(this,MainHistory.class);
@@ -145,8 +146,8 @@ public class History extends Activity {
 
 			catch (IOException e) {
 				// e.printStackTrace();
-				Toast.makeText(getApplicationContext(),
-						"Error..." + e.toString(), Toast.LENGTH_LONG).show();
+//				Toast.makeText(getApplicationContext(),"Error..." + e.toString(), Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(),"ยังไม่มีข้อมูล", Toast.LENGTH_LONG).show();
 			}
 			return answer;
 		}
@@ -186,8 +187,8 @@ public class History extends Activity {
 				employeeList.add(createEmployee("employees", outPut));
 			}
 		} catch (JSONException e) {
-			Toast.makeText(getApplicationContext(), "Error" + e.toString(),
-					Toast.LENGTH_SHORT).show();
+//			Toast.makeText(getApplicationContext(), "Error" + e.toString(),Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(),"ยังไม่มีข้อมูล", Toast.LENGTH_LONG).show();
 		}
 
 		/*SimpleAdapter simpleAdapter = new SimpleAdapter(this, employeeList,

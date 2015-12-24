@@ -1,6 +1,7 @@
 package app.akexorcist.bluetoothspp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -11,19 +12,13 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
+import com.squareup.okhttp.FormEncodingBuilder;
+import com.squareup.okhttp.RequestBody;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
-import java.util.Map;
 
 public class MainHistory extends AppCompatActivity implements ActionBar.TabListener {
     private ViewPager viewPager;
@@ -45,6 +40,7 @@ public class MainHistory extends AppCompatActivity implements ActionBar.TabListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_history);
 
+        stopService(new Intent(MainHistory.this, RSSPullService.class));
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         // Initilization
         viewPager = (ViewPager) findViewById(R.id.pager);
@@ -102,42 +98,21 @@ public class MainHistory extends AppCompatActivity implements ActionBar.TabListe
 
     public void insertTOserver(final String dt, final String tt, final String ds, final String ts){
         try {
-            final String url = "http://tqfsmart.info/addHistory.php";
+            final String SITE_URL = "http://168.63.175.28/addHistory.php";
 
-            StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>()
-            {
-                @Override
-                public void onResponse(String response)
-                {
-                    Log.v("HTTP POST @ URL : " ,url +response+ " Success.");
-                    Toast.makeText(getApplicationContext(), "เก็บประวัติแล้ว", Toast.LENGTH_LONG).show();
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error)
-                {
-                    VolleyLog.e("Error: ", error.getMessage());
-                }
-            })
-            {
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError
-                {
-                    TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            RequestBody formBody = new FormEncodingBuilder()
+                    .add("isAdd", "true")
+                    .add("imei", telephonyManager.getDeviceId())
+                    .add("datestart", dt)
+                    .add("timestart", tt)
+                    .add("datestop", ds)
+                    .add("timestop", ts)
+                    .build();
 
-                    final HashMap<String, String> params = new HashMap<>();
-                    params.put("isAdd", "true");
-                    params.put("imei", telephonyManager.getDeviceId());
-                    params.put("datestart", dt);
-                    params.put("timestart", tt);
-                    params.put("datestop", ds);
-                    params.put("timestop", ts);
-                    return params;
-                }
-            };
-            Log.v("rep", request.toString());
-//            requestQueue.add(request);
-            Volley.newRequestQueue(this).add(request);
+            PostForm p= new PostForm(formBody,SITE_URL);
+            final Toast toast = Toast.makeText(getApplicationContext(), "เก็บประวัติแล้ว", Toast.LENGTH_SHORT);
+            toast.show();
         }
         catch (Exception ex){
             Log.v("ex", ex.toString());

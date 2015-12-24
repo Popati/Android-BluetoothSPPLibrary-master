@@ -129,8 +129,8 @@ public class RSSPullService extends Service implements GoogleApiClient.Connectio
                 timeStart2 = dateFormat2.format(date);
                 Log.v("TimeStartRss", tStart.toString() + " | " + address);
 
-                callHttpGET("http://www.tqfsmart.info/delUbidots.php");
-                callHttpGET("http://www.tqfsmart.info/delUbidots2.php");
+                callHttpGET("http://168.63.175.28/delUbidots.php");
+                callHttpGET("http://168.63.175.28/delUbidots2.php");
 //                callHttpGET("http://www.tqfsmart.info/delUbidotsG.php");
                 bt.send("reset", true);
             }
@@ -148,8 +148,8 @@ public class RSSPullService extends Service implements GoogleApiClient.Connectio
         googleApiClient.isConnecting();
         Log.v("isConnect",googleApiClient.isConnecting()+"");
 
-        callHttpGET("http://www.tqfsmart.info/delUbidots.php");
-        callHttpGET("http://www.tqfsmart.info/delUbidots2.php");
+        callHttpGET("http://168.63.175.28/delUbidots.php");
+        callHttpGET("http://168.63.175.28/delUbidots2.php");
 //                callHttpGET("http://www.tqfsmart.info/delUbidotsG.php");
 //
 //        bt.setAutoConnectionListener(new BluetoothSPP.AutoConnectionListener() {
@@ -228,7 +228,7 @@ public class RSSPullService extends Service implements GoogleApiClient.Connectio
                             }
                             if (count <= 2) {//6
                                 if (hallostring.length() == 25) {
-//                                    SendLocation();//send location
+                                    SendLocation();//send location
                                     DecimalFormat dfm = new DecimalFormat("0.00");
 
                                     cel1 = hallostring.substring(14, 19);
@@ -285,7 +285,7 @@ public class RSSPullService extends Service implements GoogleApiClient.Connectio
                                 SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
                                 String node[] = hallostring.split("\\,");
-                                if (node.length == 3) {
+                                if (node.length == 3 && Integer.parseInt(node[0])!=0 && Integer.parseInt(node[1])!=0 && Integer.parseInt(node[2])!=0) {
                                     double result = CalResultVator(Integer.parseInt(node[0]), Integer.parseInt(node[1]), Integer.parseInt(node[2]));
 
                                     Intent broadcastIntent = new Intent();
@@ -296,13 +296,13 @@ public class RSSPullService extends Service implements GoogleApiClient.Connectio
                                     broadcastIntent.putExtra("z", node[2].toString());
                                     sendBroadcast(broadcastIntent);
 
-                                    if (result > 1000 && overRange == 0) {
+                                    if (result > 2500 && overRange == 0) {
                                         insertGyroTOserver(dateFormat2.format(date), node[0].toString(), node[1].toString(), node[2].toString());
                                         overRange = 1;
                                     }
                                     if (overRange == 1) {
                                         insertGyroTOserver(dateFormat2.format(date), node[0].toString(), node[1].toString(), node[2].toString());
-                                        if (result < 1000) {
+                                        if (result < 2500) {
                                             overRange = 0;
                                         }
                                     }
@@ -415,8 +415,8 @@ public class RSSPullService extends Service implements GoogleApiClient.Connectio
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = new Date();
 
-        lat=(double)location.getLatitude();
-        lng=(double)location.getLongitude();
+        lat=location.getLatitude();
+        lng=location.getLongitude();
 
         Log.v("onLocationChanged",lng+" "+lat);
         Log.v("onLocationChanged2",location.getLongitude()+" "+location.getLatitude());
@@ -493,7 +493,7 @@ public class RSSPullService extends Service implements GoogleApiClient.Connectio
         try {
             Log.v("insertTOserverLocation", lati + " " + longti);
             TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            final String SITE_URL = "http://tqfsmart.info/addLocation.php";
+            final String SITE_URL = "http://168.63.175.28/addLocation.php";
 
             RequestBody formBody = new FormEncodingBuilder()
                     .add("isAdd", "true")
@@ -504,7 +504,7 @@ public class RSSPullService extends Service implements GoogleApiClient.Connectio
                     .build();
 
             PostForm p= new PostForm(formBody,SITE_URL);
-            final Toast toast = Toast.makeText(getApplicationContext(), "location Get", Toast.LENGTH_SHORT);
+            final Toast toast = Toast.makeText(getApplicationContext(), "เก็บตำแหน่งปัจจุบันแล้ว", Toast.LENGTH_SHORT);
             toast.show();
         }
         catch (Exception ex){
@@ -514,7 +514,7 @@ public class RSSPullService extends Service implements GoogleApiClient.Connectio
     public void insertTOserverTemp(final String dt,final double temp1, final double temp2){
         try{
             Log.v("insertTOserverTemp",temp1+" / "+temp2);
-            final String SITE_URL = "http://tqfsmart.info/addDATA.php";
+            final String SITE_URL = "http://168.63.175.28/addDATA.php";
 
             TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             RequestBody formBody = new FormEncodingBuilder()
@@ -526,37 +526,8 @@ public class RSSPullService extends Service implements GoogleApiClient.Connectio
                     .build();
 
             PostForm p= new PostForm(formBody,SITE_URL);
-            final Toast toast = Toast.makeText(getApplicationContext(), "Temp Get", Toast.LENGTH_SHORT);
-            toast.show();
-//            com.squareup.okhttp.Request.Builder builder=new com.squareup.okhttp.Request.Builder();
-//            builder.post(formBody)
-//                    .url(SITE_URL);
-//
-//            builder.build();
-//
-//            com.squareup.okhttp.Request request=builder.build();
-//
-//            OkHttpClient client=new OkHttpClient();
-//            Call call=client.newCall(request);
-//
-//            call.enqueue(new Callback() {
-//                @Override
-//                public void onFailure(com.squareup.okhttp.Request request, IOException e) {
-//                    e.printStackTrace();
-//                }
-//                @Override
-//                public void onResponse(com.squareup.okhttp.Response response) throws IOException {
-//                    json = response.body().string();
-//
-//                    handler.post(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            Log.v("checkrun", json);
-//                        }
-//                    });
-//
-//                }
-//            });
+            final Toast toast = Toast.makeText(getApplicationContext(), "เก็บค่าอุณหภูมิแล้ว", Toast.LENGTH_SHORT);
+//            toast.show();
         }
         catch (Exception ex){
             Log.v("ex",ex.toString());
@@ -574,7 +545,7 @@ public class RSSPullService extends Service implements GoogleApiClient.Connectio
                     LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
                 }
 //                String queryString = createQueryString(params);
-                final String SITE_URL = "http://tqfsmart.info/addGyro.php";
+                final String SITE_URL = "http://168.63.175.28/addGyro.php";
                 TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
                 RequestBody formBody = new FormEncodingBuilder()
                         .add("isAdd", "true")
@@ -587,37 +558,8 @@ public class RSSPullService extends Service implements GoogleApiClient.Connectio
                         .add("lng",String.valueOf(lng))
                         .build();
                 PostForm p= new PostForm(formBody,SITE_URL);
-                final Toast toast = Toast.makeText(getApplicationContext(), "Gyro Get", Toast.LENGTH_SHORT);
-                toast.show();
-//                com.squareup.okhttp.Request.Builder builder=new com.squareup.okhttp.Request.Builder();
-//                builder.post(formBody)
-//                        .url(SITE_URL);
-//
-//                builder.build();
-//
-//                com.squareup.okhttp.Request request=builder.build();
-//
-//                OkHttpClient client=new OkHttpClient();
-//                Call call=client.newCall(request);
-//
-//                call.enqueue(new Callback() {
-//                    @Override
-//                    public void onFailure(com.squareup.okhttp.Request request, IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                    @Override
-//                    public void onResponse(com.squareup.okhttp.Response response) throws IOException {
-//                        json = response.body().string();
-//
-//                        handler.post(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                Log.v("checkrun", json);
-//                            }
-//                        });
-//
-//                    }
-//                });
+                final Toast toast = Toast.makeText(getApplicationContext(), "มีการกระแทกเกิดขึ้น", Toast.LENGTH_SHORT);
+//                toast.show();
             }
             catch (Exception ex) {
                 Log.v("ex", ex.toString());
@@ -668,8 +610,8 @@ public class RSSPullService extends Service implements GoogleApiClient.Connectio
                 // Call Location Services
                 LocationRequest locationRequest = new LocationRequest()
                         .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                        .setInterval(20000)//1second
-                        .setFastestInterval(10000);//5second
+                        .setInterval(10000)//10second
+                        .setFastestInterval(5000);//5second
                 LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
                 Log.v("SendLocation",locationAvailability.toString());
             } else {

@@ -44,6 +44,7 @@ public class Home extends AppCompatActivity {
         if(bt.getServiceState() == BluetoothState.STATE_CONNECTED)
             bt.disconnect();
 
+        stopService(new Intent(Home.this,RSSPullService.class));
         TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 
         SharedPreferences sp = getSharedPreferences("TimeHistory", Context.MODE_PRIVATE);
@@ -200,20 +201,11 @@ public class Home extends AppCompatActivity {
         }
     }
     public void onclickHistory(){
-        Intent intent = new Intent(this,History.class);
+        Intent intent = new Intent(this,SelectDevice.class);
     	startActivity(intent);
-    }
-    public void onclickLocal(View view){
-        Intent intent = new Intent(this,MapsActivity.class);
-        startActivity(intent);
     }
     public void onclickSetTemp(){
         Intent intent = new Intent(this,SetTemp.class);
         startActivity(intent);
     }
-    public void onclickCSV(View view){
-        Intent intent = new Intent(this,GoogleChart.class);
-        startActivity(intent);
-    }
-
 }

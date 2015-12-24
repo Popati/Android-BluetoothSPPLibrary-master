@@ -47,31 +47,13 @@ public class GoogleGraph extends Fragment {
         tStop = sp.getString("tStop", null);
         page = sp.getString("Page", null);
         imei = sp.getString("imei",null);
-        /*
-        Bundle bundle = new Bundle();
-        timeStart2 = bundle.getString("TimeStart2");
-        timeStop2 = bundle.getString("TimeStop2");
-        tStart = bundle.getString("tStart");
-        tStop = bundle.getString("tStop");
-
-        page = bundle.getString("Page");*/
-/*
-        Log.v("tStart",tStart);
-
-        if(page.equals("Terminal")){
-            final dbTracking myDb = new dbTracking(this);
-            myDb.getWritableDatabase(); // First method
-            myDb.InsertHistory(timeStart2+" "+tStart, timeStop2+" "+tStop);
-            insertTOserver(timeStart2+" "+tStart, timeStop2+" "+tStop);
-            //Toast.makeText(Graph.this, page, Toast.LENGTH_LONG).show();
-        }*/
-
+        Log.v("imei",imei);
 
         WebView myWebView = (WebView) rootView.findViewById(R.id.webview1);
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
-        String url="http://www.tqfsmart.info/AppSelect.php?fi="+timeStart2+"%20"
-                +tStart+":00&ff="+timeStop2.trim()+"%20"+tStop.trim()+":00";
+        String url="http://168.63.175.28/AppSelect.php?fi="+timeStart2+"%20"
+                +tStart+":00&ff="+timeStop2.trim()+"%20"+tStop.trim()+":00&imei="+imei.trim();
         Log.v("url",url);
 
         myWebView.loadUrl(url);

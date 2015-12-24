@@ -28,10 +28,10 @@
             android:name=".Home"
             android:label="Blood Tracking">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
         </activity>
         <activity
             android:name=".Terminal"
@@ -47,9 +47,6 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyAt7a2yEdiYhe3FoqJUrWYSCxTXU-dW80c" />
 
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
         <activity
             android:name=".TemperatureHigh"
             android:label="@string/title_activity_receiver"
@@ -76,8 +73,9 @@
 
         <service
             android:name=".RSSPullService"
-            android:exported="false"></service>
+            android:exported="false" />
 
+        <activity android:name=".SelectDevice"></activity>
     </application>
 
 </manifest>

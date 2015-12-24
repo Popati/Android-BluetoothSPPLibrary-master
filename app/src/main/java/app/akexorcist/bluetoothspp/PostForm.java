@@ -19,19 +19,20 @@ public class PostForm {
     private final OkHttpClient client = new OkHttpClient();
 
     public PostForm(RequestBody formBody,String SITE_URL) throws Exception {
-        Log.d("response okhttp", "ok");
-        handler=new Handler();
+        try {
+            Log.d("okhttp", SITE_URL);
+            handler = new Handler();
 
-        com.squareup.okhttp.Request.Builder builder=new com.squareup.okhttp.Request.Builder();
+            com.squareup.okhttp.Request.Builder builder = new com.squareup.okhttp.Request.Builder();
             builder.post(formBody)
                     .url(SITE_URL);
 
             builder.build();
 
-            com.squareup.okhttp.Request request=builder.build();
+            com.squareup.okhttp.Request request = builder.build();
 
-            OkHttpClient client=new OkHttpClient();
-            Call call=client.newCall(request);
+            OkHttpClient client = new OkHttpClient();
+            Call call = client.newCall(request);
 
             call.enqueue(new Callback() {
                 @Override
@@ -52,39 +53,49 @@ public class PostForm {
 
                 }
             });
+        }
+        catch (Exception ex){
+            Log.v("Exception",ex.toString());
+        }
     }
 
     public PostForm(String SITE_URL) {
-        handler=new Handler();
+        try {
+            Log.d("okhttp", SITE_URL);
+            handler = new Handler();
 
-        com.squareup.okhttp.Request.Builder builder=new com.squareup.okhttp.Request.Builder();
-        builder.url(SITE_URL);
+            com.squareup.okhttp.Request.Builder builder = new com.squareup.okhttp.Request.Builder();
+            builder.url(SITE_URL);
 
-        builder.build();
+            builder.build();
 
-        com.squareup.okhttp.Request request=builder.build();
+            com.squareup.okhttp.Request request = builder.build();
 
-        OkHttpClient client=new OkHttpClient();
-        Call call=client.newCall(request);
+            OkHttpClient client = new OkHttpClient();
+            Call call = client.newCall(request);
 
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(com.squareup.okhttp.Request request, IOException e) {
-                e.printStackTrace();
-            }
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(com.squareup.okhttp.Request request, IOException e) {
+                    e.printStackTrace();
+                }
 
-            @Override
-            public void onResponse(com.squareup.okhttp.Response response) throws IOException {
-                final String json = response.body().string();
+                @Override
+                public void onResponse(com.squareup.okhttp.Response response) throws IOException {
+                    final String json = response.body().string();
 
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.v("checkrun", json);
-                    }
-                });
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            Log.v("checkrun", json);
+                        }
+                    });
 
-            }
-        });
+                }
+            });
+        }
+        catch (Exception ex){
+            Log.v("Exception",ex.toString());
+        }
     }
 }

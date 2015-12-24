@@ -142,7 +142,7 @@ public class GoogleLocation extends AppCompatActivity implements GoogleApiClient
             nameValuePairs.add(new BasicNameValuePair("lo",Double.toString(longti)));
 
             HttpClient httpclient =new DefaultHttpClient();
-            HttpPost httppost=new HttpPost("http://tqfsmart.info/addLocation.php");
+            HttpPost httppost=new HttpPost("http://168.63.175.28/addLocation.php");
             httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
 
             HttpResponse response = httpclient.execute(httppost);

@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -44,7 +43,6 @@ public class MapsHistory2 extends Fragment implements OnMapReadyCallback {
     private String url = "";
     private GoogleMap mMap;
     private Marker marker;
-    private Button button;
 
     SupportMapFragment fragment;
     @Override
@@ -64,29 +62,14 @@ public class MapsHistory2 extends Fragment implements OnMapReadyCallback {
         imei = sp.getString("imei",null);
         Log.v("shared maps",tStart+" "+timeStart2+"  "+tStop+" "+timeStop2+" "+page);
 
-//        if(page.equals("Terminal")) {
-            url = "http://www.tqfsmart.info/ListLocationHistory.php?fi=" + timeStart2.trim() + "%20"
-                    + tStart.trim() + ":00&ff=" + timeStop2.trim() + "%20" + tStop.trim()
-                    + ":00";
 
-            Log.v("url",url);
-            accessWebService();
-            Log.v("MapsHistory2", "2");
-//        }
-//        fragment.getMapAsync(this);
+        url = "http://168.63.175.28/ListLocationHistory.php?fi=" + timeStart2.trim() + "%20"
+                + tStart.trim() + ":00&ff=" + timeStop2.trim() + "%20" + tStop.trim()
+                + ":00&imei="+imei.trim();
 
-//        WebView myWebView = (WebView) rootView.findViewById(R.id.webview1);
-//        WebSettings webSettings = myWebView.getSettings();
-//        webSettings.setJavaScriptEnabled(true);
-        //myWebView.loadUrl("http://www.tqfsmart.info/AppSelectLocation.php?fi=" + timeStart2 + "%20" + tStart + ":00&ff=" + timeStop2 + "%20" + tStop + ":00");
-        //myWebView.loadUrl("http://www.tqfsmart.info/AppSelect.php?fi=2015-08-30%2011:53:00&ff=2015-08-30%2012:02:00");
-//
-//        final ProgressBar mProgress = (ProgressBar) rootView.findViewById(R.id.progress_bar);
-//        myWebView.setWebViewClient(new WebViewClient() {
-//            public void onPageFinished(WebView view, String url) {
-//                mProgress.setVisibility(View.INVISIBLE);
-//            }
-//        });
+        Log.v("url",url);
+        accessWebService();
+
         return rootView;
     }
 
@@ -225,17 +208,6 @@ public class MapsHistory2 extends Fragment implements OnMapReadyCallback {
         Log.v("MyMap", String.valueOf(ln.size()));
 
         setUpMap();
-//        accessWebService();
-//        Log.v("ln", String.valueOf(ln.size()));
-//        for (int i = 0; i < ln.size(); i++) {
-//            map.addMarker(new MarkerOptions()
-//                    .position(new LatLng(Double.parseDouble(String.valueOf(la.get(i))), Double.parseDouble(String.valueOf(ln.get(i)))))
-//                    .title(String.valueOf(i)));
-////            LatLng sydney = new LatLng(Double.parseDouble(String.valueOf(la.get(i))), Double.parseDouble(String.valueOf(ln.get(i))));
-////            map.addMarker(new MarkerOptions().position(sydney).title(String.valueOf(i)));
-////            map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-//            Log.v("myItems", String.valueOf(la.get(i)));
-//        }
     }
     private void setUpMap() {
         mMap.setMyLocationEnabled(true);
